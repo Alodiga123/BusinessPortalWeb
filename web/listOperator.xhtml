@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.operator}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="formOperator">
+            <p:dataTable var="operator" value="#{bpListOperatorController.operatorList}" widgetVar="operatorTable"
+                         emptyMessage="#{msg.operatorNotFound}" filteredValue="#{bpListOperatorController.filteredOperator}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" id="operatorTable">
+
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="#{msg.searchAllFields}:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('operatorTable').filter()" style="width:150px" placeholder="#{msg.tag}"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column filterBy="#{operator.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{operator.id}" />
+                </p:column>
+
+                <p:column filterBy="#{operator.login}" headerText="#{msg.login}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{operator.login}" />
+                </p:column>
+
+                <p:column filterBy="#{operator.firstName}" headerText="#{msg.firstName}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{operator.firstName}" />
+                </p:column>
+                <p:column filterBy="#{operator.lastName}" headerText="#{msg.lastName}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{operator.lastName}" />
+                </p:column>
+
+                <p:column filterBy="#{operator.email}" headerText="#{msg.email}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{operator.email}" />
+                </p:column>
+
+                <p:column filterBy="#{operator.enabled}" headerText="#{msg.enable}"  filterMatchMode="contains" style="width:15px">
+                    <h:selectBooleanCheckbox value="#{operator.enabled}">
+                        <f:ajax event="change" listener="#{bpListOperatorController.changeEnable(operator)}" />
+                    </h:selectBooleanCheckbox>
+                </p:column>
+
+                <p:column style="width:10px;text-align: center">
+                    <p:commandButton update=":formOperator:operatorDetail" oncomplete="PF('operatorDialog').show()" icon="ui-icon-search" title="#{msg.view}">
+                        <f:setPropertyActionListener value="#{operator}" target="#{bpListOperatorController.selectedOperator}" />
+                    </p:commandButton>
+                    <p:commandButton id="editButton" update=":OperatorEditForm" oncomplete="PF('OperatorEditDialog').show()" icon="ui-icon-pencil" title="#{msg.edit}">
+                        <f:setPropertyActionListener value="#{operator}" target="#{bpListOperatorController.selectedOperator}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton id="btnAdd" value="#{msg.add}" icon="ui-icon-add" ajax="true" action="createOperator.xhtml?faces-redirect=true"/>
+            <p:dialog header="#{msg.operator}" widgetVar="operatorDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="operatorDetail" style="text-align:center;">
+                    <p:panelGrid columns="2" rendered="#{not empty bpListOperatorController.selectedOperator}" columnClasses="label,value">
+                        <h:outputText value="#{msg.id}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.id}" />
+
+                        <h:outputText value="#{msg.login}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.login}" />
+
+                        <h:outputText value="#{msg.firstName}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.firstName}"/>
+
+                        <h:outputText value="#{msg.lastName}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.lastName}"/>
+
+                        <h:outputText value="#{msg.email}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.email}"/>
+
+                        <h:outputText value="#{msg.phone}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.phoneNumber}"/>
+
+                        <h:outputText value="#{msg.creationDate}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.creationDate}"/>
+
+                        <h:outputText value="#{msg.profile}" />
+
+                        <h:outputText value="#{bpListOperatorController.selectedOperator.profile.name}"/>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <ui:include src="editOperator.xhtml"/>
+    </ui:define>
+
+</ui:composition>

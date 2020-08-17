@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="OperatorEditDlg" widgetVar="OperatorEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msg.editOperator}">
+            <h:form id="OperatorEditForm">
+                <p:growl id="messages" autoUpdate="true" sticky="true" />
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bpListOperatorController.selectedOperator != null}">
+                        <p:panelGrid columns="2" >
+
+                            <p:outputLabel value="#{msg.id}" for="id" />
+                            <p:inputText id="id" value="#{bpListOperatorController.selectedOperator.id}" title="#{msg.id}" readonly="true"/>
+
+                            <p:outputLabel value="#{msg.login}" for="login" />
+                            <p:inputText id="login" value="#{bpListOperatorController.selectedOperator.login}" title="#{msg.login}" readonly="true"/>
+
+                            <p:outputLabel value="#{msg.firstName}" for="firstName" />
+                            <p:inputText id="firstName" value="#{bpListOperatorController.selectedOperator.firstName}" title="#{msg.firstName}" required="true"/>
+
+                            <p:outputLabel value="#{msg.lastName}" for="lastName" />
+                            <p:inputText id="lastName" value="#{bpListOperatorController.selectedOperator.lastName}" title="#{msg.lastName}" required="true"/>
+
+                            <p:outputLabel value="#{msg.email}" for="email" />
+                            <p:inputText id="email" value="#{bpListOperatorController.selectedOperator.email}" title="#{msg.email}" required="true"/>
+
+                            <p:outputLabel value="#{msg.phone}" for="phone" />
+                            <p:inputText id="phone" value="#{bpListOperatorController.selectedOperator.phoneNumber}" title="#{msg.phone}" />
+
+                            <p:outputLabel value="#{msg.receiveNotification}" for="receiveNotification" />
+                            <p:selectBooleanCheckbox id="receiveNotification" value="#{bpListOperatorController.selectedOperator.receiveNotification}"/>
+
+                            <p:outputLabel value="#{msg.enable}" for="enable" />
+                            <p:selectBooleanCheckbox id="enable" value="#{bpListOperatorController.selectedOperator.enabled}"/>
+
+                            <p:outputLabel value="#{msg.language}" for="language" />
+                            <p:selectOneMenu id="language" value="#{bpListOperatorController.selectedOperator.language}" converter="languageConverter" >
+                                <f:selectItem itemLabel="#{bpListOperatorController.selectedOperator.language.description}" itemValue="#{bpListOperatorController.selectedOperator.language.id}" />
+                                <f:selectItems value="#{bpListOperatorController.languages}"/>
+                            </p:selectOneMenu> 
+
+                            <p:outputLabel value="#{msg.profile}" for="profile" />
+                            <p:selectOneMenu id="profile" value="#{bpListOperatorController.selectedOperator.profile}" converter="profileConverter" >
+                                <f:selectItem itemLabel="#{bpListOperatorController.selectedOperator.profile.name}" itemValue="#{bpListOperatorController.selectedOperator.profile.id}" />
+                                <f:selectItems value="#{bpListOperatorController.profiles}"/>
+                                <f:ajax event="change" listener="#{bpListOperatorController.getPermissions()}" render="excludedList" execute="@this"/>
+                            </p:selectOneMenu> 
+
+                        </p:panelGrid>
+                        
+                        <p:panelGrid layout="grid" id="excludedGrid" columns="1">
+                            
+                            <h:outputText value="${msg.excludedPermission}"/>
+                            
+                            <p:selectManyCheckbox id="excludedList" value="#{bpListOperatorController.includedPermissions}" converter="permissionConverter" layout="pageDirection" columns="1">
+                                <f:selectItems value="#{bpListOperatorController.availablePermissions}" var="perm" itemValue="#{perm}" itemLabel="#{operatorPermission.getPermissionLabel(perm)}"/>
+                            </p:selectManyCheckbox>
+                            
+                        </p:panelGrid>
+                    </p:panelGrid>
+                    <p:commandButton value="#{msg.save}" title="#{msg.save}" 
+                                     update=":formOperator OperatorEditDlg"
+                                     actionListener="#{bpListOperatorController.save}"
+                                     styleClass="icon-insert icon" />
+                    <p:commandButton value="#{msg.cancel}" onclick="OperatorEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

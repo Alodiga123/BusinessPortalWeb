@@ -2,34 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/avatar3.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/src/java/com/alodiga/primefaces/ultima/controller/store/StoreSettingController.java</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/src/java/com/alodiga/primefaces/ultima/controller/user/UserController.java</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/avatar.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/nbproject/build-impl.xml</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/css/layout-dark-green.css</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/avatar4.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/login.xhtml</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/avatar2.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/user-bg.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/logo-ultima.svg</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/src/java/com/alodiga/remittance/beans/LoginBean.java</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/avatar1.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/nbproject/build-impl.xml~</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/nbproject/project.xml</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/dark-user-bg.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/css/layout-blue-grey.css</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/src/java/Bundle.properties</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/user-bg2x.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/css/layout-blue.css</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/css/layout-indigo.css</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/login/login.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/src/conf/persistence.xml</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/src/java/com/alodiga/primefaces/ultima/controller/user/ListUserController.java</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/images/login/login2x.png</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/css/layout-grey.css</file>
-            <file>file:/home/usuario/workspace2/PortalDeNegocios/BusinessPortalWeb/web/resources/ultima-layout/css/layout-brown.css</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

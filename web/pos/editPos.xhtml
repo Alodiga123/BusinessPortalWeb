@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:composition>
+
+        <p:dialog id="PosEditDlg" widgetVar="PosEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar Cajas">
+            <h:form id="PosEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{dtListPosController.selectedPos != null}">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Id" for="id" />
+                            <p:inputText id="id" value="#{dtListPosController.selectedPos.id}" title="Id" disabled="true"/>
+                            <p:outputLabel value="#{msg.posCode}" for="posCode" />
+                            <p:inputText id="posCode" value="#{dtListPosController.selectedPos.posCode}" title="Code" required="true">
+                                <p:ajax event="keyup" update="qrCode"/>
+                            </p:inputText>
+                            <p:outputLabel value="#{msg.store}" for="store" />
+                            <p:selectOneMenu id="store" value="#{dtListPosController.selectedPos.store}" converter="storeConverter" >
+                                <f:selectItem itemLabel="#{dtListPosController.selectedPos.store.name}" itemValue="#{dtListPosController.selectedPos.store.id}" />
+                                <f:selectItems value="#{dtListPosController.stores}"/>
+                                <p:ajax event="change" update="qrCode"/>
+                            </p:selectOneMenu> 
+
+                            <p:outputLabel value="#{msg.openTime}" for="openTime" />
+                            <pe:timePicker id="openTime" value="#{dtListPosController.selectedPos.openTime}" mode="popup"/>
+
+                            <p:outputLabel value="#{msg.closeTime}" for="closeTime" />
+                            <pe:timePicker id="closeTime" value="#{dtListPosController.selectedPos.closeTime}" mode="popup"/>
+
+                        </p:panelGrid>
+                        <pe:qrCode id="qrCode" 
+                                   renderMethod="image" 
+                                   rendererType="normal" 
+                                   size="200" 
+                                   text="#{dtListPosController.selectedPos.qrText}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{msg.edit}" title="Editar" 
+                                     update="display,:formPos:posTable"
+                                     actionListener="#{dtListPosController.save}"
+                                     styleClass="icon-insert icon" >
+                        <p:ajax event="dialogReturn" listener="#{dtListPosController.handleReturnDialog}" 
+                                update="display,:formPos:posTable"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{msg.cancel}" onclick="PosEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

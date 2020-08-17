@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.viewqr}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="qrForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+
+                            <div align="center">
+                                <h1>#{msg.viewqr}</h1>
+                                <p:panelGrid id="businessInfoGrid" columns="2" >
+                                    <h:outputText value="#{msg.businessCode}" />
+                                    <h:outputText value="#{viewqrController.business.code}" />
+
+                                    <h:outputText value="#{msg.identification}" />
+                                    <h:outputText value="#{viewqrController.business.identification}" />
+
+                                    <h:outputText value="#{msg.address}" />
+                                    <h:outputText value="#{viewqrController.business.address}" />
+
+                                    <h:outputText value="#{msg.businessName}" />
+                                    <h:outputText value="#{viewqrController.business.name}" />
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.viewBusinessCode}" update=":qrForm:qrDetail" oncomplete="PF('qrDialog').show()" id="btnSubmit" icon="ui-icon-search" actionListener="#{viewqrController.viewBusinessQrCode()}" />
+                                </p:panelGrid>
+                            </div>
+                            <div align="center">
+                                <p:panelGrid id="selectGrid" columns="2" rendered="#{not empty viewqrController.storeList}" >
+                                    <p:panelGrid columns="1">
+                                        <h:outputText value="#{msg.store}" />
+
+                                        <p:selectOneListbox  value="#{viewqrController.selectedStore}" converter="storeConverter">
+                                            <f:selectItems value="#{viewqrController.storeList}" var="store" itemLabel="#{store.name}" itemValue="#{store}"/>
+                                            <p:ajax listener="#{viewqrController.reloadPosList()}" update="@form"/>
+                                        </p:selectOneListbox>
+
+                                        <p:commandButton rendered="#{viewqrController.selectedStore != null}" update=":qrForm:qrDetail" oncomplete="PF('qrDialog').show()" value="#{msg.viewStoreCode}" id="btnSubmitStore" icon="ui-icon-search" actionListener="#{viewqrController.viewStoreQrCode()}" />
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="1" id="selectPosGrid" rendered="#{not empty viewqrController.posList}">
+                                        <h:outputText value="#{msg.pos}" />
+                                        <p:selectOneListbox value="#{viewqrController.selectedPos}" converter="posConverter" >
+                                            <f:selectItems value="#{viewqrController.posList}" var="pos" itemLabel="#{pos.posCode}" itemValue="#{pos}"/>
+                                            <p:ajax event="change" process="@this" update="@form"/>
+                                        </p:selectOneListbox>
+                                        <p:commandButton value="#{msg.viewPosCode}" rendered="#{viewqrController.selectedPos != null}" update=":qrForm:qrDetail" oncomplete="PF('qrDialog').show()" id="btnSubmitPos" icon="ui-icon-search" actionListener="#{viewqrController.viewPosQrCode()}" />
+                                    </p:panelGrid>
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p:dialog header="#{msg.viewqr}" widgetVar="qrDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="qrDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty viewqrController.qrtext}" columnClasses="label,value">
+                        <h:outputText value="#{msg.businessCode}:" />
+                        <h:outputText value="#{viewqrController.business.code}" />
+
+                        <h:outputText value="#{msg.identification}:" />
+                        <h:outputText value="#{viewqrController.business.identification}" />
+
+                        <h:outputText value="#{msg.businessName}" />
+                        <h:outputText value="#{viewqrController.business.name}" />
+
+
+                        <h:outputText value="#{msg.store}" rendered="#{viewqrController.showStore}"/>
+                        <h:outputText value="#{viewqrController.selectedStore.name}" rendered="#{viewqrController.showStore}"/>
+
+                        <h:outputText value="#{msg.pos}" rendered="#{viewqrController.showPos}"/>
+                        <h:outputText value="#{viewqrController.selectedPos.posCode}" rendered="#{viewqrController.showPos}" />
+                    </p:panelGrid>
+                    <pe:qrCode id="qrCode" 
+                               renderMethod="image" 
+                               rendererType="normal" 
+                               size="200" 
+                               text="#{viewqrController.qrtext}"/>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

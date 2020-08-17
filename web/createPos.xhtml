@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.pos}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="PosCreateForm">
+            <h1>#{msg.pos}</h1>
+            <p:panelGrid id="containerGrid" columns="2" layout="grid"  style="border:0px none; background-color:transparent;">
+                <p:panelGrid id="dataGrid" columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+                    <p:outputLabel value="#{msg.posCode}" for="posCode" />
+                    <p:inputText id="posCode" value="#{posController.posCode}" title="Code" required="true" >
+                        <p:ajax event="keyup" update="qrCode"/>
+                    </p:inputText>
+                    <p:message for="posCode"/>
+
+                    <p:outputLabel value="#{msg.store}" for="store" />
+                    <p:selectOneMenu id="store" value="#{posController.store}" converter="storeConverter" required="true" >
+                        <f:selectItem itemLabel="Selecione Uno" noSelectionOption="true"/>
+                        <f:selectItems value="#{dtListPosController.stores}"/>
+                        <p:ajax event="change" update="qrCode openTime closeTime" />
+                    </p:selectOneMenu> 
+                    <p:message for="store"/>
+
+                    <p:outputLabel value="#{msg.openTime}" for="openTime" />
+                    <pe:timePicker id="openTime" value="#{posController.openTime}"
+                                   onHourShow="tpOpenPosOnHourShowCallback" 
+                                   onMinuteShow="tpOpenPosOnMinuteShowCallback" 
+                                   mode="popup" widgetVar="openPosTime" disabled="#{empty posController.store}"/>
+                    <p:message for="openTime"/>
+
+                    <p:outputLabel value="#{msg.closeTime}" for="closeTime" />
+                    <pe:timePicker id="closeTime" value="#{posController.closeTime}" 
+                                   onHourShow="tpClosePosOnHourShowCallback" 
+                                   onMinuteShow="tpClosePosOnMinuteShowCallback" 
+                                   mode="popup" widgetVar="closePosTime" disabled="#{empty posController.store}"/>
+                    <p:message for="closeTime"/>
+                    
+                    <script type="text/javascript">
+                        /* <![CDATA[ */
+                        function tpOpenPosOnHourShowCallback(hour) {
+                            if (!PrimeFaces.widgets['closePosTime']) {
+                                return false;
+                            }
+
+                            return (parseInt(hour) <= parseInt(PF('closePosTime').getHours()));
+
+                        }
+
+                        function tpOpenPosOnMinuteShowCallback(hour, minute) {
+                            if (!PrimeFaces.widgets['closePosTime']) {
+                                return false;
+                            }
+
+                            var tpCloseHour = parseInt(PF('closePosTime').getHours());
+
+                            return (parseInt(hour) < tpCloseHour) || ((parseInt(hour) == tpCloseHour) && (parseInt(minute) < parseInt(PF('closePosTime').getMinutes())));
+
+                        }
+
+                        function tpClosePosOnHourShowCallback(hour) {
+                            if (!PrimeFaces.widgets['openPosTime']) {
+                                return false;
+                            }
+
+                            return parseInt(hour) >= parseInt(PF('openPosTime').getHours());
+                        }
+
+                        function tpClosePosOnMinuteShowCallback(hour, minute) {
+                            if (!PrimeFaces.widgets['openPosTime']) {
+                                return false;
+                            }
+
+                            var tpStartHour = parseInt(PF('openPosTime').getHours());
+
+                            return (parseInt(hour) > tpStartHour) || ((parseInt(hour) == tpStartHour) && (parseInt(minute) > parseInt(PF('openPosTime').getMinutes())));
+                        }
+                        /* ]]> */
+                    </script>
+                </p:panelGrid>
+                <pe:qrCode id="qrCode" 
+                           renderMethod="image" 
+                           rendererType="normal" 
+                           size="200" 
+                           text="#{posController.qrText}"/>
+            </p:panelGrid>
+
+            <div align="center">
+                <p:commandButton  value="#{msg.save}" id="btnSubmit" icon="ui-icon-save" actionListener="#{posController.save()}" />
+                <p:commandButton  value="#{msg.cancel}" id="btnCancel" icon="ui-icon-cancel" update=":PosCreateForm" actionListener="#{posController.reset()}" immediate="true" process="@this"/>
+                <p:commandButton  value="#{msg.goBack}" id="btnReturn"  icon="ui-icon-replay" update=":PosCreateForm" actionListener="#{posController.doRediret()}" immediate="true" process="@this"/>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,101 +1,65 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:pu="http://primefaces.org/ultima">
- <f:view contentType="text/html" locale='#{languajeBean.languaje}' id="fview" >
-    <div class="topbar clearfix">
-        <div class="topbar-left">            
-            <div class="logo"></div>
-        </div>
-        
-        <div class="topbar-right">
-            <a id="menu-button" href="#">
-                <i></i>
-            </a>
-            
-            <a id="topbar-menu-button" href="#">
-                <i class="material-icons">&#xE5D2;</i>
-            </a>
-            <ul class="topbar-items fadeInDown animated">
-                <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'|| guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
-                    <li class="profile-item">
-                        <a href="#">                            
-                            <div class="profile-image"></div>
-                            <span class="topbar-item-name">#{loginBean.userSession.getFirstName()}  #{loginBean.userSession.getLastName()}</span>
+<ui:composition     xmlns="http://www.w3.org/1999/xhtml"
+                    xmlns:f="http://java.sun.com/jsf/core"
+                    xmlns:h="http://java.sun.com/jsf/html"
+                    xmlns:ui="http://java.sun.com/jsf/facelets"
+                    xmlns:p="http://primefaces.org/ui"
+                    xmlns:pu="http://primefaces.org/ultima">
+    <f:view contentType="text/html" locale='#{languajeBean.languaje}' id="fview" >
+        <div class="topbar clearfix">
+            <div class="topbar-left">            
+                <div class="logo"></div>
+            </div>
+
+            <div class="topbar-right">
+                <a id="menu-button" href="#">
+                    <i></i>
+                </a>
+
+                <a id="topbar-menu-button" href="#">
+                    <i class="material-icons">&#xE5D2;</i>
+                </a>
+                <ul class="topbar-items fadeInDown animated">
+                    <li role="menuitem">
+                        <h:form>
+                            <h:commandLink styleClass="ripplelink" action="#{loginBean.logout}">
+                                <i class="topbar-icon material-icons">&#xE8AC;</i>
+                            </h:commandLink>
+                        </h:form>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="topbar-icon material-icons">&#xE8B8;</i>
+                            <span class="topbar-item-name">#{msg.setting}</span>
                         </a>
-                        
                         <ul class="ultima-menu animated">
                             <li role="menuitem">
-                                <a href="#">
-                                    <i class="material-icons">&#xE7FD;</i>
-                                    <p:selectOneMenu id="profile" value="#{loginBean.profile}" converter="profileConverter1" >
-                                        <f:selectItem itemLabel="#{loginBean.profile.name}" itemValue="#{loginBean.profile.id}" />
-                                        <f:selectItems value="#{loginBean.profiles}"/>
-                                        <f:ajax event="change" listener="#{loginBean.rechargeDashboard}"/>
-                                    </p:selectOneMenu> 
-                                </a>
+                                <p:commandLink action="changePassword.xhtml?faces-redirect=true" >
+                                    <i class="topbar-icon material-icons ui-icon-vpn-key"></i>
+                                    <span>#{msg.changePassword}</span>
+                                </p:commandLink>
                             </li>
                             <li role="menuitem">
-                                 <h:commandLink styleClass="ripplelink" action="#{loginBean.logout}">
-                                     <i class="material-icons"  >&#xE8AC;</i>
-                                    <span>#{msg.logout}</span>
-                                </h:commandLink>
+                                <p:commandLink action="businessProfile.xhtml?faces-redirect=true" >
+                                    <i class="topbar-icon material-icons ui-icon-business"></i>
+                                    <span>#{msg.viewBusinessProfile}</span>
+                                </p:commandLink>
                             </li>
                         </ul>
                     </li>
-                </ui:fragment>
-                <li>
-                    <a href="#">
-                        <i class="topbar-icon material-icons animated swing">&#xE0C9;</i>
-                        <span class="topbar-badge animated rubberBand">#{dtListRemittanceController.remittancesPendding.size()}</span>
-                        <span class="topbar-item-name">Remesas</span>
-                    </a>
-                    <ul class="ultima-menu animated">
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar1.png" library="ultima-layout" width="35"/>
-                                <span>Give me a call</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar2.png" library="ultima-layout" width="35"/>
-                                <span>Sales reports attached</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar3.png" library="ultima-layout" width="35"/>
-                                <span>About your invoice</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar2.png" library="ultima-layout" width="35"/>
-                                <span>Meeting today at 10pm</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar4.png" library="ultima-layout" width="35"/>
-                                <span>Out of office</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="search-item">
-                    <h:panelGroup styleClass="md-inputfield">
-                        <p:inputText />
-                        <label>Search</label>
-                        <i class="topbar-icon material-icons">&#xE8B6;</i>
-                    </h:panelGroup>
-                    
-                </li>
-            </ul>
+
+
+                    <!--<li class="search-item">
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText />
+                            <label>#{msg.search}</label>
+                            <i class="topbar-icon material-icons">&#xE8B6;</i>
+                        </h:panelGroup>
+
+                    </li>!-->
+
+                </ul>
+            </div>
         </div>
-    </div>
-</f:view>
+    </f:view>
 </ui:composition>

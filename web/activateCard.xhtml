@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.activateDeactivateCard}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+
+                            <div align="center">
+                                <h1>#{msg.activateDeactivateCard}</h1>
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid id="cardInfoGrid" columns="2" >
+                                    <h:outputText value="#{msg.enterCardNumber}" />
+                                    <p:inputText value="#{cardController.cardNumber}" >
+                                        <p:ajax event="change" update="@form"/>
+                                    </p:inputText>
+                                </p:panelGrid>
+                                <h:inputHidden id="timezone" value="#{cardController.timezone}"/>
+                                <script>
+                                    $(function () {
+                                        $("#cardForm\\:timezone").val(Intl.DateTimeFormat().resolvedOptions().timeZone);
+                                    });
+                                </script>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.checkStatusCard}" update="@form" oncomplete="PF('cardDialog').show()" id="btnSubmit" icon="ui-icon-search" actionListener="#{cardController.checkStatusCard()}" />
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p:dialog header="#{msg.checkCardDetail}" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="cardDetail" style="text-align:center;" rendered="#{cardController.cardStatus != null}" >
+                    <p:panelGrid columns ="1" >
+                        <div align="center">
+                            <p:panelGrid id="cardActiveGrid" columns="2" >
+                                <h:outputText value="#{msg.cardNumber}" />
+                                <h:outputText value="#{cardController.cardNumber}" />
+
+                                <h:outputText value="#{msg.cardActivateStatus}" />
+                                <h:outputText value="#{cardController.cardStatusData}" />
+                            </p:panelGrid>
+                        </div>
+                        <div align="center">
+                            <p:panelGrid  columns="1" rendered="#{cardController.cardStatus eq 'deactive'}">
+                                <p:commandButton  value="#{msg.activateCard}" update="messages" oncomplete="PF('cardDialog').hide()" id="btnActivate" icon="ui-icon-search" actionListener="#{cardController.activateCard()}" />
+                            </p:panelGrid>
+                            <p:panelGrid  columns="1" rendered="#{cardController.cardStatus eq 'active'}">
+                                <p:commandButton  value="#{msg.deactivateCard}" update="messages" oncomplete="PF('cardDialog').hide()" id="btnDeactivate" icon="ui-icon-search" actionListener="#{cardController.deactivateCard()}" />
+                            </p:panelGrid>
+                        </div>
+                    </p:panelGrid>
+                </p:outputPanel>
+                <p:outputPanel id="errorPanel" style="text-align:center;" rendered="#{cardController.hasError}" >
+                    <h:outputText value="#{cardController.errorMessage}" />
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+

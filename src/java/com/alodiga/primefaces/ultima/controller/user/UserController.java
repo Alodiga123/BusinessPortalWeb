@@ -30,9 +30,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import org.primefaces.model.DualListModel;
 import com.portal.business.commons.models.User;
-import com.portal.business.commons.models.UserHasProfile;
+import com.portal.business.commons.utils.Encoder;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
@@ -165,27 +169,15 @@ public class UserController {
         try {
             user = new User();
             user.setLogin(login);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
+
             user.setPhoneNumber(phoneNumber);
-            Date now = new Date((new java.util.Date()).getTime());
-            Timestamp creationDate = new Timestamp(now.getTime());
-            user.setCreationDate(creationDate);
+            user.setCreationDate(new Timestamp(System.currentTimeMillis()));
             user.setEmail(email);
             user.setEnabled(true);
-            user.setPassword(password);
+            user.setPassword(Encoder.MD5(password));
             user.setReceiveNotification(true);
-            List<UserHasProfile> userHasProfiles = new ArrayList<UserHasProfile>();
-            for (Profile profile : profiles.getTarget()) {
-                UserHasProfile userHasProfile = new UserHasProfile();
-                userHasProfile.setProfile(profile);
-                userHasProfile.setUser(user);
-                userHasProfile.setBeginningDate(creationDate);
-                userHasProfiles.add(userHasProfile);
-            }
             WsRequest request = new WsRequest();
             request.setParam(user);
-            user.setUserHasProfile(userHasProfiles);
             userData.saveUser(request);
             messages = "El usuario " + login + " ha sido guardado con exito";
             FacesContext.getCurrentInstance().addMessage(null,
@@ -195,6 +187,10 @@ public class UserController {
         } catch (GeneralException ex) {
             ex.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Error General"));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

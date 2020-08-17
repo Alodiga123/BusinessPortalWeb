@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.rechargeWalletTitle}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <div align="center">
+                                <h1>#{msg.rechargeWalletTitle}</h1>
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid id="cardInfoGrid" columns="2" >
+                                    <h:outputText value="#{msg.rechargeWalletUserEmailOrPhone}" />
+                                    <p:inputText value="#{rechargeController.userEmailOrPhone}" >
+                                        <p:ajax event="change" update="@form"/>
+                                    </p:inputText>
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.rechargeWalletSearchUser}" update="@form,:dialogForm" oncomplete="PF('confirmDialog').show()" id="btnSubmit" icon="ui-icon-search" actionListener="#{rechargeController.searchUser()}" />
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <p:dialog header="#{msg.rechargeWalletRechargeConfirm}" id="confirmDialog" widgetVar="confirmDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="dialogForm" >
+                <p:panel id="amountDetail" style="text-align:center;" rendered="#{not rechargeController.hasError and rechargeController.phase eq 1}">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="#{msg.firstName}" />
+                        <h:outputText value="#{rechargeController.firstName}" />
+
+                        <h:outputText value="#{msg.lastName}" />
+                        <h:outputText value="#{rechargeController.lastName}" />
+
+                        <h:outputText value="#{msg.rechargeWalletUserEmail}" />
+                        <h:outputText value="#{rechargeController.userEmail}" />
+
+                        <h:outputText value="#{msg.rechargeWalletUserPhone}" />
+                        <h:outputText value="#{rechargeController.userPhone}" />
+
+                        <h:outputText value="#{msg.accountNumber}" />
+                        <h:outputText value="#{rechargeController.accountNumber}" />
+
+                        <h:outputText value="#{msg.rechargeWalletIncludeFee}" />
+                        <p:selectBooleanCheckbox  id="includeFee" value="#{rechargeController.includeFees}" />
+
+                        <h:outputText value="#{msg.rechargeWalletRechargeAmount}" />
+                        <p:inputNumber id="amountToRecharge" value="#{rechargeController.rechargeAmount}" />
+
+                        <h:outputText value="#{msg.rechargeWalletProduct}" />
+                        <p:selectOneMenu id="productSelection" value="#{rechargeController.selectedProduct}" converter="productConverter" >
+                            <f:selectItems value="#{rechargeController.activateProducts}" var="prod" itemLabel="#{prod.name}" />
+                        </p:selectOneMenu>
+
+                        <p:commandButton  value="#{msg.accept}" process="dialogForm:productSelection dialogForm:amountToRecharge dialogForm:includeFee @this" update="@form" 
+                                          oncomplete="PF('confirmDialog').show()" 
+                                          id="btnAcceptRecharge" icon="ui-icon-send" 
+                                          action="#{rechargeController.verifyRecharge()}" />
+                        <p:commandButton  value="#{msg.cancel}" update=":confirmDialog :cardForm" oncomplete="PF('confirmDialog').hide()" id="btnCancel" icon="ui-icon-cancel" actionListener="#{rechargeController.reset()}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:panel id="confirmDetail" style="text-align:center;" rendered="#{not rechargeController.hasError and rechargeController.phase eq 2}">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="#{msg.firstName}" />
+                        <h:outputText value="#{rechargeController.firstName}" />
+
+                        <h:outputText value="#{msg.lastName}" />
+                        <h:outputText value="#{rechargeController.lastName}" />
+
+                        <h:outputText value="#{msg.rechargeWalletUserEmail}" />
+                        <h:outputText value="#{rechargeController.userEmail}" />
+
+                        <h:outputText value="#{msg.rechargeWalletUserPhone}" />
+                        <h:outputText value="#{rechargeController.userPhone}" />
+
+                        <h:outputText value="#{msg.accountNumber}" />
+                        <h:outputText value="#{rechargeController.accountNumber}" />
+
+                        <h:outputText value="#{msg.rechargeWalletProduct}" />
+                        <h:outputText value="#{rechargeController.selectedProduct.name}" />
+
+                        <h:outputText value="#{msg.rechargeWalletRechargeAmount}" />
+                        <h:outputText value="#{rechargeController.rechargeAmount}" />
+
+                        <h:outputText value="#{msg.rechargeWalletRate}" />
+                        <h:outputText value="#{rechargeController.totalFee}" />
+
+                        <h:outputText value="#{msg.rechargeWalletTotalCharge}" />
+                        <h:outputText value="#{rechargeController.totalCharge}" />
+
+                        <p:commandButton  value="#{msg.confirm}" update="@form" oncomplete="PF('confirmDialog').show()" id="btnConfirm" icon="ui-icon-check" actionListener="#{rechargeController.recharge()}" />
+                        <p:commandButton  value="#{msg.cancel}" update=":confirmDialog :cardForm" oncomplete="PF('confirmDialog').hide()" id="btnCancelRecharge" icon="ui-icon-cancel" actionListener="#{rechargeController.reset()}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:panel id="finalDetail" style="text-align:center;" rendered="#{not rechargeController.hasError and rechargeController.phase eq 3}">
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            <p:messages id="messages"  autoUpdate="false" closable="false" />
+                        </f:facet>
+                        <h:outputText value="#{msg.firstName}" />
+                        <h:outputText value="#{rechargeController.firstName}" />
+
+                        <h:outputText value="#{msg.lastName}" />
+                        <h:outputText value="#{rechargeController.lastName}" />
+
+                        <h:outputText value="#{msg.rechargeWalletUserEmail}" />
+                        <h:outputText value="#{rechargeController.userEmail}" />
+
+                        <h:outputText value="#{msg.rechargeWalletUserPhone}" />
+                        <h:outputText value="#{rechargeController.userPhone}" />
+
+                        <h:outputText value="#{msg.accountNumber}" />
+                        <h:outputText value="#{rechargeController.accountNumber}" />
+
+                        <h:outputText value="#{msg.rechargeWalletProduct}" />
+                        <h:outputText value="#{rechargeController.selectedProduct.name}" />
+
+                        <h:outputText value="#{msg.rechargeWalletRechargeAmount}" />
+                        <h:outputText value="#{rechargeController.rechargeAmount}" />
+
+                        <h:outputText value="#{msg.rechargeWalletRate}" />
+                        <h:outputText value="#{rechargeController.totalFee}" />
+
+                        <h:outputText value="#{msg.rechargeWalletTotalCharge}" />
+                        <h:outputText value="#{rechargeController.totalCharge}" />
+
+                        <h:outputText value="#{msg.rechargeWalletTransaction}" />
+                        <h:outputText value="#{rechargeController.transactionId}" />
+
+                        <p:commandButton  value="#{msg.accept}" update=":confirmDialog :cardForm" oncomplete="PF('confirmDialog').hide()" id="btnAccepLast" icon="ui-icon-check" actionListener="#{rechargeController.reset()}"/>
+                        <p:commandButton  value="#{msg.print}" update=":confirmDialog :cardForm" oncomplete="PF('confirmDialog').hide()" id="btnPrint" icon="ui-icon-print" actionListener="#{rechargeController.reset()}" />
+                    </p:panelGrid>
+                </p:panel>
+                <p:panel id="errorDetail" style="text-align:center;" rendered="#{rechargeController.hasError}">
+                    <h:outputText value="#{rechargeController.errorMessage}" />
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>
+

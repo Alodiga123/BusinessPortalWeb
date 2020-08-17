@@ -1,6 +1,6 @@
 package com.alodiga.primefaces.ultima.controller;
  
-import com.portal.business.commons.models.Country;
+import com.portal.business.commons.remittance.RemittanceCountry;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;

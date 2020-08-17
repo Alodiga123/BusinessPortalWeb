@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.consultRequest}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <div align="center">
+                                <h1>#{msg.consultRequest}</h1>
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid id="cardReportGrid" columns ="3">
+                                    <p:panelGrid  columns="1" >
+                                        <p:panelGrid columns="2">
+                                            <p:selectBooleanCheckbox value="#{requestReportController.hasDate}">
+                                                <p:ajax update="@form"/>
+                                            </p:selectBooleanCheckbox>
+                                            <h:outputText value="#{msg.reportWithDate}" />
+                                        </p:panelGrid>
+                                        <p:panelGrid id="cardDateGrid" columns="6" rendered="#{requestReportController.hasDate}" >
+                                            <h:outputText value="#{msg.startDate}" />
+                                            <p:calendar id="startDate" value="#{requestReportController.startDate}" pattern="MM/dd/yyyy HH:mm" maxdate="#{requestReportController.maxDate}">
+                                                <p:ajax event="dateSelect" update="endDate" />
+                                            </p:calendar>
+
+                                            <h:outputText value="#{msg.endDate}" />
+                                            <p:calendar id="endDate" value="#{requestReportController.endDate}" 
+                                                        pattern="MM/dd/yyyy HH:mm" mindate="#{requestReportController.startDate}" 
+                                                        maxdate="#{requestReportController.maxDate}" />
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                    <p:panelGrid  columns="1" >
+                                        <h:outputText value="#{msg.cardRequestStatusReport}" />
+                                        <p:panelGrid  columns="2" >
+                                            <p:selectBooleanCheckbox value="#{requestReportController.statusPrerequest}">
+                                                <p:ajax update="@form"/>
+                                            </p:selectBooleanCheckbox>
+                                            <h:outputText value="#{msg.cardrequestStatusPREREQUEST}" />
+                                            <p:selectBooleanCheckbox value="#{requestReportController.statusPending}">
+                                                <p:ajax update="@form"/>
+                                            </p:selectBooleanCheckbox>
+                                            <h:outputText value="#{msg.cardrequestStatusPENDING}" />
+                                            <p:selectBooleanCheckbox value="#{requestReportController.statusaproved}">
+                                                <p:ajax update="@form"/>
+                                            </p:selectBooleanCheckbox>
+                                            <h:outputText value="#{msg.cardrequestStatusAPROVED}" />
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                    <p:panelGrid  columns="1" >
+                                        <p:commandButton  value="#{msg.reportTransactionGenerate}" update="@form" id="btnFeatureSubmit" icon="ui-icon-search" actionListener="#{requestReportController.doFilteredReport()}" />
+                                    </p:panelGrid>
+
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:dataTable id="resultList" var="cardRequest" rendered="#{requestReportController.resultList != null}" 
+                         value="#{requestReportController.resultList}" emptyMessage="#{msg.reportTransactionEmptyResult}" 
+                         filteredValue="#{requestReportController.filteredResult}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" >
+                <p:column filterBy="#{cardRequest.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{cardRequest.id}" />
+                </p:column>
+
+                <p:column filterBy="#{cardRequest.dateRequest}" headerText="#{msg.date}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{cardRequest.dateRequest}" />
+                </p:column>
+
+                <p:column filterBy="#{cardRequest.firstName}" headerText="#{msg.firstName}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{cardRequest.firstName}" />
+                </p:column>
+
+                <p:column filterBy="#{cardRequest.lastName}" headerText="#{msg.lastName}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{cardRequest.lastName}" />
+                </p:column>
+
+                <p:column filterBy="#{requestReportController.getCountry(cardRequest.getIdCountry()).name}" headerText="#{msg.country}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{requestReportController.getCountry(cardRequest.getIdCountry()).name}" />
+                </p:column>
+
+                <p:column filterBy="#{cardRequest.phoneNumber}" headerText="#{msg.phone}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{cardRequest.phoneNumber}" />
+                </p:column>
+
+                <p:column filterBy="#{cardRequest.email}" headerText="#{msg.email}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{cardRequest.email}" />
+                </p:column>
+
+                <p:column filterBy="#{requestReportController.getStatus(cardRequest.status)}" headerText="#{msg.status}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{requestReportController.getStatus(cardRequest.status)}" />
+                </p:column>
+
+
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

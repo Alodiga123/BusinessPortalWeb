@@ -15,11 +15,11 @@
  */
 package com.alodiga.primefaces.ultima.sorter;
 
-import com.portal.business.commons.models.Country;
+import com.portal.business.commons.remittance.RemittanceCountry;
 import java.util.Comparator;
 import org.primefaces.model.SortOrder;
 
-public class LazyCountrySorter implements Comparator<Country> {
+public class LazyCountrySorter implements Comparator<RemittanceCountry> {
 
     private String sortField;
     
@@ -30,10 +30,10 @@ public class LazyCountrySorter implements Comparator<Country> {
         this.sortOrder = sortOrder;
     }
 
-    public int compare(Country country1, Country country2) {
+    public int compare(RemittanceCountry country1, RemittanceCountry country2) {
         try {
-            Object value1 = Country.class.getField(this.sortField).get(country1);
-            Object value2 = Country.class.getField(this.sortField).get(country2);
+            Object value1 = RemittanceCountry.class.getField(this.sortField).get(country1);
+            Object value2 = RemittanceCountry.class.getField(this.sortField).get(country2);
 
             int value = ((Comparable)value1).compareTo(value2);
             

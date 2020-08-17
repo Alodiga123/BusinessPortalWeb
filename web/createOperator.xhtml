@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.operator}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="OperatorCreateForm">
+            <div class="card card-w-title">
+                <h1>#{msg.operator}</h1>
+                <p:panelGrid id="containerGrid" columns="2" style="border:0px none; background-color:transparent;">
+                    <f:facet name="header">
+                        <p:messages id="messages"  autoUpdate="true" closable="true" />
+                    </f:facet>
+                    <p:panelGrid id="dataGrid" columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        <p:outputLabel value="#{msg.login}" for="login" />
+                        <p:inputText autocomplete="false" id="login" value="#{operatorController.login}" title="#{msg.login}" required="true"/>
+
+                        <p:outputLabel value="#{msg.password}" for="password" />
+                        <p:password autocomplete="false" id="password" value="#{operatorController.password}" title="#{msg.password}" required="true"/>
+
+                        <p:outputLabel value="#{msg.firstName}" for="firstName" />
+                        <p:inputText autocomplete="false" id="firstName" value="#{operatorController.firstName}" title="#{msg.firstName}" required="true" />
+
+                        <p:outputLabel value="#{msg.lastName}" for="lastName" />
+                        <p:inputText autocomplete="false" id="lastName" value="#{operatorController.lastName}" title="#{msg.lastName}" required="true"/>
+
+                        <p:outputLabel value="#{msg.email}" for="email" />
+                        <p:inputText autocomplete="false" id="email" value="#{operatorController.email}" title="#{msg.email}" required="true"/>
+
+                        <p:outputLabel value="#{msg.phone}" for="phone" />
+                        <p:inputText autocomplete="false" id="phone" value="#{operatorController.phoneNumber}" title="#{msg.phone}" />
+
+                        <p:outputLabel value="#{msg.receiveNotification}" for="receiveNotification" />
+                        <p:selectBooleanCheckbox id="receiveNotification" value="#{operatorController.receiveNotification}" />
+
+                        <p:outputLabel value="#{msg.language}" for="language" />
+                        <p:selectOneMenu id="language" value="#{operatorController.language}" converter="languageConverter" >
+                            <f:selectItem itemLabel="Selecione Uno" />
+                            <f:selectItems value="#{bpListOperatorController.languages}"/>
+                        </p:selectOneMenu> 
+
+                        <p:outputLabel value="#{msg.profile}" for="profile" />
+                        <p:selectOneMenu id="profile" value="#{operatorController.profile}" converter="profileConverter" >
+                            <f:selectItem itemLabel="Selecione Uno" />
+                            <f:selectItems value="#{bpListOperatorController.profiles}"/>
+                            <f:ajax event="change" listener="#{operatorController.reloadPermission()}" render="excludedList" execute="@this"/>
+                        </p:selectOneMenu> 
+
+                    </p:panelGrid>
+                    <p:panelGrid id="permissionGrid" columns="1" layout="grid" style="border:0px none; background-color:transparent;">
+                        <h:outputText value="${msg.excludedPermission}"/>
+                        <p:selectManyCheckbox id="excludedList" value="#{operatorController.includedPermissions}" converter="permissionConverter" layout="responsive" columns="1">
+                            <f:converter converterId="permissionConverter"/>
+                            <f:selectItems value="#{operatorPermission.availablePermissions}" var="perm" itemValue="#{perm}" itemLabel="#{operatorPermission.getPermissionLabel(perm)}"/>
+                        </p:selectManyCheckbox>
+                    </p:panelGrid>
+                </p:panelGrid>
+            </div>
+            <div align="center">
+                <p:commandButton  value="#{msg.save}" id="btnSubmit" icon="ui-icon-save" actionListener="#{operatorController.save()}" />
+                <p:commandButton  value="#{msg.cancel}" id="btnCancel" icon="ui-icon-cancel" update=":OperatorCreateForm" actionListener="#{operatorController.reset()}" immediate="true" process="@this"/>
+                <p:commandButton  value="#{msg.goBack}" id="btnReturn"  icon="ui-icon-replay" update=":OperatorCreateForm" actionListener="#{operatorController.doRediret()}" immediate="true" process="@this"/>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

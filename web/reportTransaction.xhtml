@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.reportTransactionTitle}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <div align="center">
+                                <h1>#{msg.reportTransactionTitle}</h1>
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid id="cardInfoGrid" columns="6" >
+                                    <h:outputText value="#{msg.startDate}" />
+                                    <p:calendar id="startDate" value="#{transactionReportController.startDate}" pattern="MM/dd/yyyy HH:mm">
+                                        <p:ajax event="dateSelect" update="endDate" />
+                                    </p:calendar>
+
+                                    <h:outputText value="#{msg.endDate}" />
+                                    <p:calendar id="endDate" value="#{transactionReportController.endDate}" 
+                                                pattern="MM/dd/yyyy HH:mm" mindate="#{transactionReportController.startDate}" 
+                                                maxdate="#{transactionReportController.maxDate}" />
+
+                                    <h:outputText value="#{msg.reporTransactionOperationType}" />
+                                    <p:selectOneMenu id="store" value="#{transactionReportController.selectedOperationType}" converter="operationTypeConverter" >
+                                        <f:selectItem itemLabel="#{msg.all}" value="#{null}"/>
+                                        <f:selectItems value="#{transactionReportController.operationTypes}"/>
+                                    </p:selectOneMenu>
+
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.reportTransactionGenerate}" update="@form" id="btnSubmit" icon="ui-icon-search" actionListener="#{transactionReportController.doReport()}" />
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:dataTable id="resultList" var="transaction" rendered="#{transactionReportController.resultList != null}" 
+                         value="#{transactionReportController.resultList}" emptyMessage="#{msg.reportTransactionEmptyResult}" 
+                         filteredValue="#{transactionReportController.filteredResult}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" >
+                <p:column filterBy="#{transaction.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{transaction.id}" />
+                </p:column>
+
+                <p:column filterBy="#{transaction.type}" headerText="#{msg.reporTransactionOperationType}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{transaction.type}" />
+                </p:column>
+
+                <p:column filterBy="#{transaction.totalAmount}" headerText="#{msg.reportTransactionTotalAmount}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{transaction.totalAmount}" />
+                </p:column>
+
+                <p:column filterBy="#{transaction.businessFee}" headerText="#{msg.reportTransactionBusinessFee}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{transaction.businessFee}" />
+                </p:column>
+
+                <p:column filterBy="#{transaction.dateTransaction}" headerText="#{msg.date}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{transaction.dateTransaction}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

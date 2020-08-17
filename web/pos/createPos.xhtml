@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.pos}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="PosCreateForm">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>#{msg.pos}</h1>
+                            <p:panelGrid id="containerGrid" columns="2" style="border:0px none; background-color:transparent;">
+                                <p:panelGrid id="dataGrid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <f:facet name="header">
+                                        <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                    </f:facet>
+                                    
+                                    <p:outputLabel value="#{msg.posCode}" for="posCode" />
+                                    <p:inputText id="posCode" value="#{posController.posCode}" title="Code" >
+                                        <p:ajax event="keyup" update="qrCode"/>
+                                    </p:inputText>
+                                    
+                                    <p:outputLabel value="#{msg.store}" for="store" />
+                                    <p:selectOneMenu id="store" value="#{posController.store}" converter="storeConverter" >
+                                        <f:selectItem itemLabel="Selecione Uno" />
+                                        <f:selectItems value="#{dtListPosController.stores}"/>
+                                        <p:ajax event="change" update="qrCode"/>
+                                    </p:selectOneMenu> 
+                                    
+                                    <p:outputLabel value="#{msg.openTime}" for="openTime" />
+                                    <pe:timePicker id="openTime" value="#{posController.openTime}" mode="popup"/>
+
+                                    <p:outputLabel value="#{msg.closeTime}" for="closeTime" />
+                                    <pe:timePicker id="closeTime" value="#{posController.closeTime}" mode="popup"/>
+                                    
+                                </p:panelGrid>
+                                <pe:qrCode id="qrCode" 
+                                           renderMethod="image" 
+                                           rendererType="normal" 
+                                           size="200" 
+                                           text="#{posController.qrText}"/>
+                            </p:panelGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div align="center">
+                <p:commandButton  value="#{msg.save}" id="btnSubmit" icon="ui-icon-save" actionListener="#{posController.save()}" />
+                <p:commandButton  value="#{msg.cancel}" id="btnCancel" icon="ui-icon-cancel" update=":PosCreateForm" actionListener="#{posController.reset()}" immediate="true" process="@this"/>
+                <p:commandButton  value="#{msg.goBack}" id="btnReturn"  icon="ui-icon-replay" update=":PosCreateForm" actionListener="#{posController.doRediret()}" immediate="true" process="@this"/>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

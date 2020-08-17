@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="title">#{msg.preference}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="PreferenceValueForm">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>#{msg.preference}</h1>
+                            <p:panelGrid id="grid" columns="1" >
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel value="#{msg.preferenceType}" for="selectedPreference" />
+                                    <p:selectOneMenu id="selectedPreference" value="#{preferenceValueController.selectedPreference}" converter="preferenceConverter">
+                                        <f:selectItem itemLabel="#{msg.SelectOne}" transient="true" noSelectionOption="true"/>
+                                        <f:selectItems value="#{preferenceValueController.preferences}" var="pref" itemLabel="#{pref.name}" itemValue="#{pref}"/>
+                                        <f:ajax listener="#{preferenceValueController.reloadSelectedFields()}" render="fieldMenu" />
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+
+                                <p:dataTable id="fieldMenu" var="field" value="#{preferenceValueController.selectedFields}" >
+                                    <p:column headerText="#{msg.field}" >
+                                        <h:outputText value="#{field.displayName}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.value}" rendered="#{field.preferenceType.type eq 'STRING'}" >
+                                        <h:inputText value="#{field.currentValue}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg.value}" rendered="#{field.preferenceType.type eq 'FLOAT'}" >
+                                        <p:inputNumber value="#{field.currentValue}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg.value}" rendered="#{field.preferenceType.type eq 'INTEGER'}" >
+                                        <p:inputNumber value="#{field.currentValue}"  decimalPlaces="0" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg.value}" rendered="#{field.preferenceType.type eq 'DATE'}" >
+                                        <p:inputMask value="#{field.currentValue}"  mask="99/99/9999" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.value}" rendered="#{field.preferenceType.type eq 'PERIOD'}" >
+                                        <h:inputText value="#{field.currentValue}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg.value}" rendered="#{field.preferenceType.type eq 'BOOLEAN'}" >
+                                        <h:selectBooleanCheckbox value="#{field.currentBooleanValue}"/>
+                                    </p:column>
+                                    
+                                </p:dataTable>
+                            </p:panelGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </h:form>
+    </ui:define>
+
+</ui:composition>

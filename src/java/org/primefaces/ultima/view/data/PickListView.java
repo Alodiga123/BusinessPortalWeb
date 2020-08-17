@@ -15,15 +15,7 @@
  */
 package org.primefaces.ultima.view.data;
 
-import com.portal.business.commons.exceptions.GeneralException;
-import com.portal.business.commons.exceptions.NullParameterException;
-import com.portal.business.commons.generic.WsRequest;
-import com.portal.business.commons.models.Profile;
-import com.portal.business.commons.models.User;
-import com.portal.business.commons.models.UserHasProfile;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;

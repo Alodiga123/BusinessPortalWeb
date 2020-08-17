@@ -10,34 +10,33 @@
     <ui:define name="content">
         <h:form id="formStore">
             <p:dataTable var="store" value="#{dtListStoreController.stores}" widgetVar="storesTable"
-                         emptyMessage="#{msg.StoreNotFound}" filteredValue="#{dtListStoreController.filteredStore}" paginator="true" rows="10" style="margin-bottom:20px"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
-                 rowsPerPageTemplate="5,10,15" id="storeTable">
+                         emptyMessage="No se encontraron sucursales con estos criterios" filteredValue="#{dtListStoreController.filteredStore}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" id="storeTable">
 
                 <f:facet name="header">
                     <p:outputPanel>
-                        <h:outputText value="#{msg.searchAllFields}:" />
+                        <h:outputText value="Buscar en todos los campos:" />
                         <p:inputText id="globalFilter" onkeyup="PF('storesTable').filter()" style="width:150px" placeholder="Inserte palabra clave"/>
                     </p:outputPanel>
                 </f:facet>
 
-                <p:column filterBy="#{store.login}" headerText="#{msg.login}"  filterMatchMode="contains" style="width:15px">
-                    <h:outputText value="#{store.login}" />
+                <p:column filterBy="#{store.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{store.id}" />
                 </p:column>
 
-                <p:column filterBy="#{store.firstName}" headerText="#{msg.name}"  filterMatchMode="contains" style="width:30px">
-                    <h:outputText value="#{store.firstName}" />
+                <p:column filterBy="#{store.storeCode}" headerText="#{msg.storeCode}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{store.storeCode}" />
                 </p:column>
 
-                <p:column filterBy="#{store.lastName}" headerText="#{msg.lastName}"  filterMatchMode="contains" style="width:30px">
-                    <h:outputText value="#{store.lastName}" />
+                <p:column filterBy="#{store.name}" headerText="#{msg.name}"  filterMatchMode="contains" style="width:30px">
+                    <h:outputText value="#{store.name}" />
                 </p:column>
-                
-                <p:column filterBy="#{store.isPrePaid}" headerText="#{msg.prepaid}"  filterMatchMode="contains" style="width:30px">
-                    <h:outputText value="#{store.isPrePaid}" />
-                </p:column>
-                
-               
+
+                <p:column filterBy="#{store.address}" headerText="#{msg.address}"  filterMatchMode="contains" style="width:30px">
+                    <h:outputText value="#{store.address}" />
+                </p:column>                
+
                 <p:column style="width:10px;text-align: center">
                     <p:commandButton update=":formStore:storeDetail" oncomplete="PF('storeDialog').show()" icon="ui-icon-search" title="View">
                         <f:setPropertyActionListener value="#{store}" target="#{dtListStoreController.selectedStore}" />
@@ -48,74 +47,38 @@
                         <f:setPropertyActionListener value="#{store}" target="#{dtListStoreController.selectedStore}" />
                     </p:commandButton>
                 </p:column>
-                 <p:column style="width:10px;text-align:">
-                    <p:commandButton id="editEnabled" update=":formStore:storeTable" icon="#{store.enabled ? 'ui-icon-check' : 'ui-icon-block'}" title="Estatus" action="#{dtListStoreController.doChanceStatus()}">
-                        <f:setPropertyActionListener value="#{store}" target="#{dtListStoreController.selectedStore}" />
-                    </p:commandButton>
-                </p:column>
             </p:dataTable>
-            <p:commandButton id="btnAdd" value="#{msg.add}" icon="ui-icon-add" ajax="true" actionListener="#{dtListStoreController.doRediret()}"/>
-            <p:dialog header="#{msg.store}" widgetVar="storeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <p:outputPanel id="storeDetail" style="text-align:center;">
-            <p:panelGrid  columns="4" rendered="#{not empty dtListStoreController.selectedStore}" columnClasses="label,value">
-                <h:outputText value="Id:" />
-                <h:outputText value="#{dtListStoreController.selectedStore.id}" />
-                
-                <h:outputText value="#{msg.login}:" />
-                <h:outputText value="#{dtListStoreController.selectedStore.login}" />
-                
-                <h:outputText value="#{msg.name}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.firstName}" />
- 
-                <h:outputText value="#{msg.lastName}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.lastName}" />
-                
-                <h:outputText value="#{msg.creationDate}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.creationDate}" />
-                
-                <h:outputText value="Email" />
-                <h:outputText value="#{dtListStoreController.selectedStore.email}" />
-                
-                <h:outputText value="#{msg.phone}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.phoneNumber}" />
-                
-                <h:outputText value="#{msg.prepaid}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.isPrePaid}" />
-                
-                <h:outputText value="Balance" rendered="#{dtListStoreController.selectedStore.isPrePaid}"/>
-                <h:outputText value="#{dtListStoreController.selectedStore.balance}" rendered="#{dtListStoreController.selectedStore.isPrePaid}"/>
-                
-                <h:outputText value="#{msg.Credit}" rendered="#{dtListStoreController.selectedStore.isPrePaid?false:true}"/>
-                <h:outputText value="#{dtListStoreController.selectedStore.crediLimit}" rendered="#{dtListStoreController.selectedStore.isPrePaid?false:true}"/>
-                
-                <h:outputText value="#{msg.Period}" rendered="#{dtListStoreController.selectedStore.isPrePaid?false:true}"/>
-                <h:outputText value="#{dtListStoreController.selectedStore.period.name}" rendered="#{dtListStoreController.selectedStore.isPrePaid?false:true}"/>
+            <p:commandButton id="btnAdd" value="Agregar" icon="ui-icon-add" ajax="true" actionListener="#{dtListStoreController.doRediret()}"/>
+            <p:dialog header="Tienda" widgetVar="storeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="storeDetail" style="text-align:center;">
+                    <p:panelGrid  columns="4" rendered="#{not empty dtListStoreController.selectedStore}" columnClasses="label,value">
+                        <h:outputText value="#{msg.id}:" />
+                        <h:outputText value="#{dtListStoreController.selectedStore.id}" />
 
-                <h:outputText value="#{msg.active}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.enabled}" />
- 
-                <h:outputText value="#{msg.country}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.address.country.name}"/>
-                
-                <h:outputText value="#{msg.state}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.address.state.name}"/>
-                
-                <h:outputText value="#{msg.county}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.address.county.name}"/>
-                
-                <h:outputText value="#{msg.city}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.address.city.name}"/>
-                
-                <h:outputText value="#{msg.address}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.address.address}"/>
-                
-                <h:outputText value="#{msg.zip}" />
-                <h:outputText value="#{dtListStoreController.selectedStore.address.zipCode}"/>
-            </p:panelGrid>
-        </p:outputPanel>
-    </p:dialog>
+                        <h:outputText value="#{msg.storeCode}:" />
+                        <h:outputText value="#{dtListStoreController.selectedStore.storeCode}" />
+
+                        <h:outputText value="#{msg.name}" />
+                        <h:outputText value="#{dtListStoreController.selectedStore.name}" />
+
+                        <h:outputText value="#{msg.address}" />
+                        <h:outputText value="#{dtListStoreController.selectedStore.address}" />
+
+                        <h:outputText value="#{msg.openTime}" />
+                        <h:outputText value="#{dtListStoreController.selectedStore.openTime}" >
+                            <f:convertDateTime pattern="hh:mm aa" />
+                        </h:outputText>
+
+                        <h:outputText value="#{msg.closeTime}" />
+                        <h:outputText value="#{dtListStoreController.selectedStore.closeTime}" >
+                            <f:convertDateTime pattern="hh:mm aa" />
+                        </h:outputText>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
-    <ui:include src="editStore.xhtml"/>
+        <ui:include src="editStore.xhtml"/>
 
     </ui:define>
 

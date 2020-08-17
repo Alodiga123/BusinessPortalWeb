@@ -3,9 +3,10 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
-<ui:define name="title">Sample</ui:define>
+    <ui:define name="title">#{msg.store}</ui:define>
 
     <ui:define name="content">
         <h:form id="StoreCreateForm">
@@ -18,99 +19,33 @@
                                 <f:facet name="header">
                                     <p:messages id="messages"  autoUpdate="true" closable="true" />
                                 </f:facet>
-                                <p:outputLabel value="#{msg.login}" for="login" />
-                                <p:inputText id="login" value="#{storeController.login}" title="Login" required="true"/>
-                                <p:outputLabel value="#{msg.password}" for="password" />
-                                <p:password id="password" value="#{storeController.password}" title="Password" required="true" redisplay="true"/>
+                                
+
+                                <p:outputLabel value="#{msg.storeCode}" for="storeCode" />
+                                <p:inputText id="storeCode" value="#{storeController.storeCode}" title="#{msg.storeCode}" required="true"/>
+
                                 <p:outputLabel value="#{msg.name}" for="name" />
-                                <p:inputText id="name" value="#{storeController.firstName}" title="Nombre" required="true"/>
-                                <p:outputLabel value="#{msg.lastName}" for="lastName" />
-                                <p:inputText id="lastName" value="#{storeController.lastName}" title="Apellido" required="true"/>
-                                <p:outputLabel value="Email" for="email" />
-                                <p:inputText id="email" value="#{storeController.email}" title="Email" required="true"/>
-                                <p:outputLabel value="#{msg.phone}" for="phone" />
-                                <p:inputText id="phone" value="#{storeController.phoneNumber}" title="Telefono" required="true" />
-                                <p:outputLabel value="#{msg.language}" for="language" />
-                                <p:selectOneMenu id="language" value="#{storeController.language}" converter="languageConverter">
-                                    <f:selectItem itemLabel="#{storeController.language.description}" itemValue="#{dtListStoreController.selectedStore.language.id}" />
-                                    <f:selectItems value="#{storeController.languages}"/>
-                                </p:selectOneMenu> 
-                                <p:outputLabel value="#{msg.Enterprise}" for="enterpride" />
-                                <p:selectOneMenu id="enterpride" value="#{storeController.enterprise}" converter="enterpriseConverter">
-                                    <f:selectItem itemLabel="#{storeController.enterprise.name}" itemValue="#{storeController.enterprise}" />
-                                    <f:selectItems value="#{storeController.enterprises}"/>
-                                </p:selectOneMenu> 
-                                </p:panelGrid>
-                                <p:panelGrid id="grid2" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel value="#{msg.prepaid}" for="isPrePaid" />
-                                    <p:selectBooleanCheckbox id="isPrePaid" value="#{storeController.isPrePaid}" >
-                                        <p:ajax event="change" update="StoreCreateForm:grid2"/>
-                                    </p:selectBooleanCheckbox>
-                                    <p:outputLabel value="Balance" for="balance" rendered="#{storeController.isPrePaid}"/>
-                                    <p:inputNumber id="balance" value="#{storeController.balance}" title="Balance"  decimalPlaces="2" rendered="#{storeController.isPrePaid}"/>
-                                    <p:outputLabel value="#{msg.credit}" for="creditLimit" rendered="#{storeController.isPrePaid?false:true}"/>
-                                    <p:inputNumber id="creditLimit" value="#{storeController.crediLimit}" title="Limite de Credito"  decimalPlaces="2" rendered="#{storeController.isPrePaid?false:true}"/>
-                                    <p:outputLabel value="#{msg.period}" for="periodo" rendered="#{storeController.isPrePaid?false:true}"/>
-                                    <p:selectOneMenu id="periodo" value="#{storeController.period}" converter="periodConverter" rendered="#{storeController.isPrePaid?false:true}">
-                                        <f:selectItem itemLabel="#{msg.SelectOne}" itemValue="#{dtListStoreController.selectedStore.period.id}" />
-                                        <f:selectItems value="#{dtListStoreController.periods}"/>
-                                    </p:selectOneMenu> 
-                                </p:panelGrid>
-                             <p:panelGrid id="grid3" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                 <p:outputLabel value="#{msg.country}" for="pais" />
-                                <p:selectOneMenu id="pais" value="#{storeController.country}" converter="countryConverter"
-                                                 effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="#{storeController.country.name}"
-                                                  itemValue="#{storeController.country.id}" />
-                                    <f:selectItems value="#{storeController.countries}"/>
-                                    <f:ajax event="change" listener="#{storeController.reloadStates}" render="estado" />
-                                </p:selectOneMenu> 
-                                 <p:outputLabel value="#{msg.state}" for="estado" />
-                                <p:selectOneMenu id="estado" value="#{storeController.state}" converter="stateConverter" 
-                                                 effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="#{msg.SelectOne}" itemValue="#{storeController.state}" />
-                                    <f:selectItems value="#{storeController.states}"/>
-                                    <f:ajax event="change" listener="#{storeController.reloadCities}" render="ciudad " />
-                                    <p:ajax process="@this" listener="#{storeController.reloadCountes}" event="change" update=":StoreCreateForm:condado"  />
-                                </p:selectOneMenu> 
-                                <p:outputLabel value="#{msg.city}" for="ciudad" />
-                                <p:selectOneMenu id="ciudad" value="#{storeController.city}" converter="cityConverter"
-                                                 effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="#{msg.SelectOne}" itemValue="#{storeController.city}" />
-                                    <f:selectItems value="#{storeController.cities}"/>
-                                </p:selectOneMenu>
-                                <p:outputLabel value="#{msg.county}" for="condado" />
-                                <p:selectOneMenu id="condado" value="#{storeController.county}" converter="countyConverter"
-                                                 effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="#{msg.SelectOne}" itemValue="#{storeController.county}" />
-                                    <f:selectItems value="#{storeController.counties}"/>
-                                </p:selectOneMenu> 
+                                <p:inputText id="name" value="#{storeController.name}" title="#{msg.name}" required="true"/>
+
                                 <p:outputLabel value="#{msg.address}" for="address" />
-                                <p:inputTextarea id="address" rows="2" cols="50" value="#{storeController.address}" title="Direccion" required="true"/>
-                                <p:outputLabel value="#{msg.zip}" for="zip" />
-                                <p:inputText id="zip" value="#{storeController.zip}" title="Codigo Zip" required="true" />
+                                <p:inputTextarea id="address" rows="2" cols="50" value="#{storeController.address}" title="#{msg.address}"/>
+
+                                <p:outputLabel value="#{msg.openTime}" for="openTime" />
+                                <pe:timePicker id="openTime" value="#{storeController.openTime}" mode="popup"/>
+
+                                <p:outputLabel value="#{msg.closeTime}" for="closeTime" />
+                                <pe:timePicker id="closeTime" value="#{storeController.closeTime}" mode="popup"/>
+
                             </p:panelGrid>
                         </div>
                     </div>
                 </div>
             </div>
             <div align="center">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <p:commandButton  value="Guardar" id="btnSubmit" icon="ui-icon-save" actionListener="#{storeController.save()}" />
-                <p:commandButton  value="Cancelar" id="btnCancel" icon="ui-icon-cancel" update=":StoreCreateForm" actionListener="#{storeController.reset()}" immediate="true" process="@this"/>
-                <p:commandButton  value="Volver" id="btnReturn"  icon="ui-icon-replay" update=":StoreCreateForm" actionListener="#{storeController.doRediret()}" immediate="true" process="@this"/>
-=======
-=======
->>>>>>> f863b28ed3db089f06a25c8aa99fe99e51a82d47
                 <p:commandButton  value="#{msg.save}" id="btnSubmit" icon="ui-icon-save" actionListener="#{storeController.save()}" />
 
                 <p:commandButton  value="#{msg.cancel}" id="btnCancel" icon="ui-icon-cancel" update=":StoreCreateForm" actionListener="#{storeController.reset()}" immediate="true" process="@this"/>
-                <p:commandButton  value="#{msg.return}" id="btnReturn"  icon="ui-icon-replay" update=":StoreCreateForm" actionListener="#{storeController.doRediret()}" immediate="true" process="@this"/>
-<<<<<<< HEAD
->>>>>>> f863b28ed3db089f06a25c8aa99fe99e51a82d47
-=======
->>>>>>> f863b28ed3db089f06a25c8aa99fe99e51a82d47
+                <p:commandButton  value="#{msg.goBack}" id="btnReturn"  icon="ui-icon-replay" update=":StoreCreateForm" actionListener="#{storeController.doRediret()}" immediate="true" process="@this"/>
             </div>
         </h:form>
     </ui:define>

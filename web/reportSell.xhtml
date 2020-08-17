@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.reportSellTitle}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <div align="center">
+                                <h1>#{msg.reportSellTitle}</h1>
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid id="cardInfoGrid" columns="6" >
+                                    <h:outputText value="#{msg.startDate}" />
+                                    <p:calendar id="startDate" value="#{sellReportController.startDate}" pattern="MM/dd/yyyy HH:mm" maxdate="#{sellReportController.maxDate}">
+                                        <p:ajax event="dateSelect" update="endDate" />
+                                    </p:calendar>
+
+                                    <h:outputText value="#{msg.endDate}" />
+                                    <p:calendar id="endDate" value="#{sellReportController.endDate}" 
+                                                pattern="MM/dd/yyyy HH:mm" mindate="#{sellReportController.startDate}" 
+                                                maxdate="#{sellReportController.maxDate}" />
+                                </p:panelGrid>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.reportTransactionGenerate}" update="@form" id="btnSubmit" icon="ui-icon-search" actionListener="#{sellReportController.doReport()}" />
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:dataTable id="resultList" var="sell" rendered="#{sellReportController.resultList != null}" 
+                         value="#{sellReportController.resultList}" emptyMessage="#{msg.reportTransactionEmptyResult}" 
+                         filteredValue="#{sellReportController.filteredResult}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" >
+                <p:column filterBy="#{sell.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.id}" />
+                </p:column>
+
+                <p:column filterBy="#{sell.dateSell}" headerText="#{msg.date}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.dateSell}" />
+                </p:column>
+
+                <p:column filterBy="#{sell.store.name}" headerText="#{msg.store}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.store.name}" />
+                </p:column>
+
+                <p:column filterBy="#{sell.pos.posCode}" headerText="#{msg.pos}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.pos.posCode}" />
+                </p:column>
+
+                <p:column filterBy="#{sell.idWalletTransaction}" headerText="#{msg.idWalletTransaction}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.idWalletTransaction}" />
+                </p:column>
+
+                <p:column filterBy="#{sell.amount}" headerText="#{msg.sellAmount}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.amount}" />
+                </p:column>
+
+                <p:column filterBy="#{sell.origin}" headerText="#{msg.origin}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{sell.origin}" />
+                </p:column>
+
+
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.pos}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="formPos">
+            <p:dataTable var="pos" value="#{dtListPosController.posList}" widgetVar="posTable"
+                         emptyMessage="#{msg.posNotFound}" filteredValue="#{dtListPosController.filteredPos}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" id="posTable">
+
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="#{msg.searchAllFields}:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('posTable').filter()" style="width:150px" placeholder="#{msg.tag}"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column filterBy="#{pos.id}" headerText="Id"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{pos.id}" />
+                </p:column>
+
+                <p:column filterBy="#{pos.posCode}" headerText="#{msg.posCode}"  filterMatchMode="contains" style="width:30px">
+                    <h:outputText value="#{pos.posCode}" />
+                </p:column>
+
+                <p:column filterBy="#{pos.store.name}" headerText="#{msg.store}"  filterMatchMode="contains" style="width:30px">
+                    <h:outputText value="#{pos.store.name}" />
+                </p:column>
+
+                <p:column headerText="#{msg.posSchedule}"  filterMatchMode="contains" style="width:30px">
+                    <h:outputText value="#{pos.openTimeString} #{msg.to} #{pos.closeTimeString}" />
+                </p:column>
+
+                <p:column style="width:10px;text-align: center">
+                    <p:commandButton update=":formPos:posDetail" oncomplete="PF('posDialog').show()" icon="ui-icon-search" title="View">
+                        <f:setPropertyActionListener value="#{pos}" target="#{dtListPosController.selectedPos}" />
+                    </p:commandButton>
+                </p:column>
+                <p:column style="width:10px;text-align: center">
+                    <p:commandButton id="editButton" update=":PosEditForm" oncomplete="PF('PosEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                        <f:setPropertyActionListener value="#{pos}" target="#{dtListPosController.selectedPos}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton id="btnAdd" value="#{msg.add}" icon="ui-icon-add" ajax="true" actionListener="#{dtListPosController.doRediret()}"/>
+            <p:dialog header="#{msg.pos}" widgetVar="posDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="posDetail" style="text-align:center;">
+                    <p:panelGrid columns="2" rendered="#{not empty dtListPosController.selectedPos}" columnClasses="info,qr">
+                        <p:panelGrid  columns="2" columnClasses="label,value">
+                            <h:outputText value="Id:" />
+
+                            <h:outputText value="#{dtListPosController.selectedPos.id}" />
+
+                            <h:outputText value="#{msg.posCode}" />
+
+                            <h:outputText value="#{dtListPosController.selectedPos.posCode}" />
+
+                            <h:outputText value="#{msg.store}" />
+
+                            <h:outputText value="#{dtListPosController.selectedPos.store.name}"/>
+
+                            <h:outputText value="#{msg.openTime}" />
+
+                            <h:outputText value="#{dtListPosController.selectedPos.openTimeString}"/>
+
+                            <h:outputText value="#{msg.closeTime}" />
+
+                            <h:outputText value="#{dtListPosController.selectedPos.closeTimeString}"/>
+
+                        </p:panelGrid>
+                        <pe:qrCode id="qrCode" 
+                                   renderMethod="image" 
+                                   rendererType="normal" 
+                                   size="200" 
+                                   text="#{dtListPosController.selectedPos.qrText}"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <ui:include src="editPos.xhtml"/>
+    </ui:define>
+
+</ui:composition>

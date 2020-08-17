@@ -92,4 +92,10 @@
         <extension>svg#fontawesomeregular</extension>
         <mime-type>image/svg+xml</mime-type>
     </mime-mapping>
+    
+    <servlet>
+        <servlet-name>Startup</servlet-name>
+        <servlet-class>com.portal.business.commons.startup.Startup</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 </web-app>

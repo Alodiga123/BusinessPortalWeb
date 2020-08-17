@@ -1,0 +1,291 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <p:dialog id="closeDetailDlg" widgetVar="closeDetailDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msg.businessCloseDetail}">
+        <h:form id="closeDetailForm" >
+            <div align="center">
+                <!--<h1>#{msg.businessCloseDetail}</h1>!-->
+                <p:panelGrid id="closeSummaryGrid" columns="1" >
+                    <p:tabView>
+                        <p:tab title="#{msg.closeSummaryTitle}">
+                            <p:panelGrid id="operationSummaryGrid" styleClass="ui-noborder">
+                                <p:row>
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.date}" />
+                                    </p:column>
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.businessClose.dateClose}" />
+                                    </p:column>
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.status}" />
+                                    </p:column>
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.businessClose.status}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row />
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.closeSuccessTransactionTotal}" />
+                                    </p:column>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{businessCloseController.summarySuccessTransaction}" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.closeFailedTransactionTotal}" />
+                                    </p:column>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{businessCloseController.summaryFailedTransaction}" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.closeTransactionTotal}" />
+                                    </p:column>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{businessCloseController.summaryTotalTransaction}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2"/>
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.closeNumberTotal}" />
+                                    </p:column>
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.closeComission}" />
+                                    </p:column>
+                                </p:row>
+                                <p:repeat value="#{businessCloseController.operationTypes}" var="opType">
+                                    <p:row>
+                                        <p:column colspan="2">
+                                            <h:outputText value="#{businessCloseController.getOperationName(opType)}" />
+                                        </p:column>
+                                        <p:column colspan="1">
+                                            <h:outputText value="#{businessCloseController.getOperationAmount(opType)}" />
+                                        </p:column>
+                                        <p:column colspan="1">
+                                            <h:outputText value="#{businessCloseController.getOperationCommission(opType)}" />
+                                        </p:column>
+                                    </p:row>
+                                </p:repeat>
+                            </p:panelGrid>
+                        </p:tab>
+                        <p:tab title="#{msg.closeTransactionTile}" rendered="#{not empty businessCloseController.transactions}">
+                            <p:dataTable var="transaction" value="#{businessCloseController.transactions}" 
+                                         paginator="true" rows="10" style="margin-bottom:20px"
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                                         rowsPerPageTemplate="5,10,15">
+                                <p:column filterBy="#{transaction.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                                    <h:outputText value="#{transaction.id}" />
+                                </p:column>
+
+                                <p:column filterBy="#{transaction.user.displayName}" headerText="#{msg.operator}"  filterMatchMode="contains" style="width:15px">
+                                    <h:outputText value="#{transaction.user.displayName}" />
+                                </p:column>
+
+                                <p:column filterBy="#{transaction.dateTransaction}" headerText="#{msg.date}"  filterMatchMode="contains" style="width:15px">
+                                    <h:outputText value="#{transaction.dateTransaction}" />
+                                </p:column>
+
+                                <p:column filterBy="#{businessCloseController.getOperationName(transaction.type)}" headerText="#{msg.operationType}"  filterMatchMode="contains" style="width:15px">
+                                    <h:outputText value="#{businessCloseController.getOperationName(transaction.type)}" />
+                                </p:column>
+
+                                <p:column filterBy="#{transaction.transactionId}" headerText="#{msg.transactionID}"  filterMatchMode="contains" style="width:15px">
+                                    <h:outputText value="#{transaction.transactionId}" />
+                                </p:column>
+
+                                <p:column filterBy="#{transaction.businessFee}" headerText="#{msg.commission}"  filterMatchMode="contains" style="width:15px">
+                                    <h:outputText value="#{transaction.businessFee}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="#{msg.closeCashTitle}" rendered="#{not empty businessCloseController.transactions}" >
+                            <p:panelGrid id="closeCashGrid" styleClass="ui-noborder">
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.concept}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.noTotal}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.sellAmount}" />
+                                    </p:column>
+
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.recharges}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.rechargeTotal}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.rechargeAmount}" />
+                                    </p:column>
+
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.recharges}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.withdrawTotal}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.withdrawAmount}" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="3">
+                                        <h:outputText value="#{msg.netCash}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.cashTotal}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="4">
+                                        <p:dataTable var="operator" value="#{businessCloseController.operators}" 
+                                                     paginator="true" rows="10" style="margin-bottom:20px"
+                                                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                                                     rowsPerPageTemplate="5,10,15">
+                                            <p:column filterBy="#{operator.displayName}" headerText="#{msg.name}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{operator.displayName}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{businessCloseController.getRechargeTotalByOperator(operator)}" headerText="#{msg.rechargeTotal}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{businessCloseController.getRechargeTotalByOperator(operator)}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{businessCloseController.getRechargeAmountByOperator(operator)}" headerText="#{msg.rechargeAmount}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{businessCloseController.getRechargeAmountByOperator(operator)}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{businessCloseController.getWithdrawTotalByOperator(operator)}" headerText="#{msg.withdrawTotal}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{businessCloseController.getWithdrawTotalByOperator(operator)}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{businessCloseController.getWithdrawAmountByOperator(operator)}" headerText="#{msg.withdrawAmount}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{businessCloseController.getWithdrawAmountByOperator(operator)}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{businessCloseController.getCashTotalByOperator(operator)}" headerText="#{msg.netCash}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{businessCloseController.getCashTotalByOperator(operator)}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:tab>
+                        <p:tab title="#{msg.closeBuyTitle}" rendered="#{not empty businessCloseController.sells}" >
+                            <p:panelGrid id="closeBuyGrid" styleClass="ui-noborder" >
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.concept}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.noTotal}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.sellAmount}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.settlementRate}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{msg.ingress}" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="#{msg.qrSell}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.sellsSize}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.sellsAmount}" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="100" />
+                                    </p:column>
+
+                                    <p:column colspan="1">
+                                        <h:outputText value="#{businessCloseController.sellsAmount}" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column colspan="6">
+                                        <p:dataTable var="storeSell" value="#{businessCloseController.storePosReport}" 
+                                                     paginator="true" rows="10" style="margin-bottom:20px"
+                                                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                                                     rowsPerPageTemplate="5,10,15">
+                                            <p:column filterBy="#{storeSell.storeName}" headerText="#{msg.store}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{storeSell.storeName}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{storeSell.posName}" headerText="#{msg.pos}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{storeSell.posName}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{storeSell.sellSize}" headerText="#{msg.noTotal}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{storeSell.sellSize}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{storeSell.sellAmount}" headerText="#{msg.sellAmount}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{storeSell.sellAmount}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{storeSell.settlement}" headerText="#{msg.settlementRate}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{storeSell.settlement}" />
+                                            </p:column>
+
+                                            <p:column filterBy="#{storeSell.sellAmount}" headerText="#{msg.ingress}"  filterMatchMode="contains" style="width:15px">
+                                                <h:outputText value="#{storeSell.sellAmount}" />
+                                            </p:column>
+
+
+
+                                        </p:dataTable>
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+                        </p:tab>
+                    </p:tabView>
+                </p:panelGrid>
+            </div>
+        </h:form>
+    </p:dialog>
+</ui:composition>

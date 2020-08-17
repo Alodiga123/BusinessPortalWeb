@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.businessProfile}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="qrForm" >
+            <div align="center">
+                <h1>#{msg.businessProfile}</h1>
+                <p:panelGrid id="businessInfoGrid" columns="2" >
+                    <h:outputText value="#{msg.businessCode}" />
+                    <h:outputText value="#{viewqrController.business.code}" />
+
+                    <h:outputText value="#{msg.identification}" />
+                    <h:outputText value="#{viewqrController.business.identification}" />
+
+                    <h:outputText value="#{msg.commercialDenomination}" />
+                    <h:outputText value="#{viewqrController.business.commercialDenomination}" />
+
+                    <h:outputText value="#{msg.businessName}" />
+                    <h:outputText value="#{viewqrController.business.name}" />
+
+                    <h:outputText value="#{msg.legalAddress}" />
+                    <h:outputText value="#{viewqrController.business.legalAddress}" />
+
+                    <h:outputText value="#{msg.address}" />
+                    <h:outputText value="#{viewqrController.business.address}" />
+
+                    <h:outputText value="#{msg.phone}" />
+                    <h:outputText value="#{viewqrController.business.phoneNumber}" />
+                    
+                    <h:outputText value="#{msg.website}" />
+                    <h:outputText value="#{viewqrController.business.website}" />
+                </p:panelGrid>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

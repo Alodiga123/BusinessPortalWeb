@@ -21,16 +21,12 @@ import com.portal.business.commons.data.UserData;
 import com.portal.business.commons.exceptions.EmptyListException;
 import com.portal.business.commons.exceptions.GeneralException;
 import com.portal.business.commons.exceptions.NullParameterException;
-import com.portal.business.commons.exceptions.RegisterNotFoundException;
 import com.portal.business.commons.generic.WsRequest;
 import com.portal.business.commons.models.Profile;
 import com.portal.business.commons.models.User;
-import com.portal.business.commons.models.UserHasProfile;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,18 +39,18 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.LazyDataModel;
 
-@ManagedBean(name="dtLazyUserView")
+@ManagedBean(name = "dtLazyUserView")
 @ViewScoped
 public class ListUserController implements Serializable {
-    
+
     private LazyDataModel<User> lazyModel;
-    
+
     private User selectedUser;
     private UserData userData = null;
     private DualListModel<Profile> profiles;
-    private AccessControlData  accessControlData;
+    private AccessControlData accessControlData;
     private String icon;
-    
+
     @PostConstruct
     public void init() {
         try {
@@ -97,28 +93,27 @@ public class ListUserController implements Serializable {
     }
 
     public DualListModel<Profile> getProfiles() {
-         try{
+        try {
             accessControlData = new AccessControlData();
             userData = new UserData();
             WsRequest request = new WsRequest();
-            List<Profile>  list = accessControlData.getProfiles(request);
-            List<Profile>  profilesSource = new ArrayList<Profile>();
-            List<Profile> profilesTarget =  new ArrayList<Profile>();
+            List<Profile> list = accessControlData.getProfiles(request);
+            List<Profile> profilesSource = new ArrayList<Profile>();
+            List<Profile> profilesTarget = new ArrayList<Profile>();
             if (selectedUser != null) {
 
-                for (UserHasProfile userHasProfile : selectedUser.getUserHasProfile()){
-                    profilesSource.add(userHasProfile.getProfile());
-                }
+                profilesSource.add(selectedUser.getProfile());
+
                 for (Profile profile : list) {
                     if (!profilesSource.contains(profile)) {
                         profilesTarget.add(profile);
                     }
 
                 }
-            }else{
-                 profilesSource = list;
+            } else {
+                profilesSource = list;
             }
-            
+
             profiles = new DualListModel<Profile>(profilesSource, profilesTarget);
         } catch (EmptyListException ex) {
         } catch (GeneralException ex) {
@@ -134,11 +129,8 @@ public class ListUserController implements Serializable {
     public void save() {
         try {
             WsRequest request = new WsRequest();
-            
-             if (selectedUser.getId() != null) {
-                userData.deleteUserHasProfile(selectedUser.getId());
-            }
-            List<UserHasProfile> userHasProfiles = new ArrayList<UserHasProfile>();
+
+            /*List<UserHasProfile> userHasProfiles = new ArrayList<UserHasProfile>();
             for (Profile profile : profiles.getSource()) {
                 UserHasProfile userHasProfile = new UserHasProfile();
                 WsRequest request1 = new WsRequest();
@@ -155,7 +147,7 @@ public class ListUserController implements Serializable {
                 userHasProfile.setBeginningDate(creationDate);
                 userHasProfiles.add(userHasProfile);
             }
-            selectedUser.setUserHasProfile(userHasProfiles);
+            selectedUser.setUserHasProfile(userHasProfiles);*/
             request.setParam(selectedUser);
             userData.saveUser(request);
         } catch (NullParameterException ex) {
@@ -165,12 +157,12 @@ public class ListUserController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Error General"));
         }
     }
-    
+
     public void handleReturnDialog(SelectEvent event) {
         if (event != null && event.getObject() != null) {
         }
     }
-    
+
     public void doRediret() {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("userView.xhtml");
@@ -178,7 +170,7 @@ public class ListUserController implements Serializable {
             System.out.println("com.alodiga.primefaces.ultima.controller.LazyUserView.doRediret()");
         }
     }
-    
+
     public void doChanceStatus() {
         try {
             WsRequest request = new WsRequest();
@@ -200,12 +192,13 @@ public class ListUserController implements Serializable {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-    
+
     public String icon(User user) {
-        if (user.getEnabled())
+        if (user.getEnabled()) {
             return "ui-icon-check";
-        else
+        } else {
             return "ui-icon-block";
+        }
     }
-    
+
 }

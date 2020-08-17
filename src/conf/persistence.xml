@@ -1,73 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="BusinessPortalWebPU" transaction-type="JTA">
-    <jta-data-source>jdbc/remettences</jta-data-source>
-    <class>com.remettence.commons.models.Account</class>
-    <class>com.remettence.commons.models.AccountHasIpAddress</class>
-    <class>com.remettence.commons.models.Address</class>
-    <class>com.remettence.commons.models.AuditAction</class>
-    <class>com.remettence.commons.models.Bank</class>
-    <class>com.remettence.commons.models.City</class>
-    <class>com.remettence.commons.models.Correspondent</class>
-    <class>com.remettence.commons.models.Country</class>
-    <class>com.remettence.commons.models.CountryTranslation</class>
-    <class>com.remettence.commons.models.County</class>
-    <class>com.remettence.commons.models.CountyHasCity</class>
-    <class>com.remettence.commons.models.Currency</class>
-    <class>com.remettence.commons.models.DeliveryForm</class>
-    <class>com.remettence.commons.models.Document</class>
-    <class>com.remettence.commons.models.Enterprise</class>
-    <class>com.remettence.commons.models.EnterpriseHasTinType</class>
-    <class>com.remettence.commons.models.Event</class>
-    <class>com.remettence.commons.models.ExchangeRate</class>
-    <class>com.remettence.commons.models.IpAddress</class>
-    <class>com.remettence.commons.models.IpBlackList</class>
-    <class>com.remettence.commons.models.Language</class>
-    <class>com.remettence.commons.models.ParameterType</class>
-    <class>com.remettence.commons.models.PaymentMethod</class>
-    <class>com.remettence.commons.models.PaymentNetwork</class>
-    <class>com.remettence.commons.models.PaymentNetworkType</class>
-    <class>com.remettence.commons.models.PaymentType</class>
-    <class>com.remettence.commons.models.Period</class>
-    <class>com.remettence.commons.models.Permission</class>
-    <class>com.remettence.commons.models.PermissionData</class>
-    <class>com.remettence.commons.models.PermissionGroup</class>
-    <class>com.remettence.commons.models.PermissionGroupData</class>
-    <class>com.remettence.commons.models.PermissionHasProfile</class>
-    <class>com.remettence.commons.models.Person</class>
-    <class>com.remettence.commons.models.Preference</class>
-    <class>com.remettence.commons.models.PreferenceField</class>
-    <class>com.remettence.commons.models.PreferenceType</class>
-    <class>com.remettence.commons.models.PreferenceValue</class>
-    <class>com.remettence.commons.models.Profile</class>
-    <class>com.remettence.commons.models.ProfileData</class>
-    <class>com.remettence.commons.models.RatePaymentNetwork</class>
-    <class>com.remettence.commons.models.Receiver</class>
-    <class>com.remettence.commons.models.Remittance</class>
-    <class>com.remettence.commons.models.RemittentHasReceiver</class>
-    <class>com.remettence.commons.models.RemittanceHasRemittenceStatus</class>
-    <class>com.remettence.commons.models.RemittanceStatus</class>
-    <class>com.remettence.commons.models.Remittent</class>
-    <class>com.remettence.commons.models.Report</class>
-    <class>com.remettence.commons.models.ReportHasProfile</class>
-    <class>com.remettence.commons.models.ReportParameter</class>
-    <class>com.remettence.commons.models.ReportType</class>
-    <class>com.remettence.commons.models.SMS</class>
-    <class>com.remettence.commons.models.SalePrice</class>
-    <class>com.remettence.commons.models.SalePriceHistory</class>
-    <class>com.remettence.commons.models.SaleType</class>
-    <class>com.remettence.commons.models.ServiceType</class>  
-    <class>com.remettence.commons.models.State</class>
-    <class>com.remettence.commons.models.Store</class>
-    <class>com.remettence.commons.models.StoreBalance</class>
-    <class>com.remettence.commons.models.StoreBalanceHistory</class>
-    <class>com.remettence.commons.models.StoreSetting</class>
-    <class>com.remettence.commons.models.TinType</class>
-    <class>com.remettence.commons.models.User</class>
-    <class>com.remettence.commons.models.UserHasProfile</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
-    </properties>
-  </persistence-unit>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence  http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+    <persistence-unit name="BusinessPortalWebPu" transaction-type="JTA">
+        <jta-data-source>jdbc/businessPortal</jta-data-source>
+        <class>com.portal.business.commons.models.PermissionGroupData</class>
+        <class>com.portal.business.commons.models.PreferenceField</class>
+        <class>com.portal.business.commons.models.PreferenceType</class>
+        <class>com.portal.business.commons.models.TinType</class>
+        <class>com.portal.business.commons.models.Profile</class>
+        <class>com.portal.business.commons.models.PermissionGroup</class>
+        <class>com.portal.business.commons.models.Enterprise</class>
+        <class>com.portal.business.commons.models.PreferenceValue</class>
+        <class>com.portal.business.commons.models.IpAddress</class>
+        <class>com.portal.business.commons.models.ParameterType</class>
+        <class>com.portal.business.commons.models.Preference</class>
+        <class>com.portal.business.commons.models.ProfileData</class>
+        <class>com.portal.business.commons.models.Permission</class>
+        <class>com.portal.business.commons.models.PermissionData</class>
+        <class>com.portal.business.commons.models.PermissionHasProfile</class>
+        <class>com.portal.business.commons.models.Store</class>
+        <class>com.portal.business.commons.models.ReportType</class>
+        <class>com.portal.business.commons.models.Language</class>
+        <class>com.portal.business.commons.models.IpBlackList</class>
+        <class>com.portal.business.commons.models.User</class>
+        <class>com.portal.business.commons.models.Pos</class>
+        <class>com.portal.business.commons.models.Operator</class>
+        <class>com.portal.business.commons.models.Business</class>
+        <class>com.portal.business.commons.models.BusinessStatus</class>
+        <class>com.portal.business.commons.models.PreferenceFieldData</class>
+        <class>com.portal.business.commons.models.UserCardTransactionLog</class>
+        <class>com.portal.business.commons.models.UserCardTransactionLog</class>
+        <class>com.portal.business.commons.models.BusinessBalanceIncoming</class>
+        <class>com.portal.business.commons.models.BusinessBalanceOutgoing</class>
+        <class>com.portal.business.commons.models.BusinessSell</class>
+        <class>com.portal.business.commons.models.BusinessClose</class>
+        <class>com.portal.business.commons.models.Address</class>
+        <class>com.portal.business.commons.models.Register</class>
+        <class>com.portal.business.commons.models.CardPreRequest</class>  
+        <class>com.portal.business.commons.models.Person</class>      
+        <class>com.portal.business.commons.models.NaturalPerson</class>
+        <class>com.portal.business.commons.models.LegalPerson</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.logging.timestamp" value="true"/>
+            <property name="eclipselink.logging.level" value="OFF"/>
+            <property name="toplink.cache.type.default" value="Full"/>
+            <property name="toplink.cache.size.default" value="5000"/>
+            <property name="toplink.cache.shared.Secret" value="false"/>
+            <property name="javax.persistence.schema-generation-action" value="create"/>
+            <property name="javax.persistence.schema-generation-target" value="database"/> 
+            <property name="eclipselink.ddl-generation" value="create-tables" />
+            <property name="eclipselink.ddl-generation.output-mode" value="database" />
+            <property name="eclipselink.deploy-on-startup" value="true"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="cmsPU" transaction-type="JTA">
+        <jta-data-source>jdbc/CMS</jta-data-source>
+        <class>com.portal.business.commons.cms.CmsCountry</class>
+        <class>com.portal.business.commons.cms.CmsState</class>
+        <class>com.portal.business.commons.cms.CmsCity</class>
+        <class>com.portal.business.commons.cms.CmsDocumentPersonType</class>
+        <class>com.portal.business.commons.cms.CmsPersonType</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.logging.level" value="ALL"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.exceptions" value="true"/>
+            <property name="eclipselink.logging.level.sql" value="ALL"/>
+            <property name="eclipselink.logging.file" value="jpa_output.log"/>
+            <property name="eclipselink.logging.logger" value="ServerLogger"/>
+        </properties>
+    </persistence-unit>
 </persistence>

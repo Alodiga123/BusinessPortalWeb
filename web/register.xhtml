@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first" >
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{msg.title}</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <h:outputScript name="js/layout.js" library="ultima-layout" />
+
+    </h:head>
+    <h:body styleClass="login-body" >
+        <f:view contentType="text/html" locale='#{languajeBean.languaje}' id="fview" >
+            <p:messages autoUpdate="true" id="msgs" showDetail="true" showSummary="true" />
+            <h:form id="registerForm" >
+                <div class="card login-panel ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:graphicImage name="images/img-alodiga-logo.png" library="ultima-layout" />
+                        </div>
+
+
+                        <h:outputText value="#{msg.emailMessage}" />
+                        <div class="ui-g-12">
+
+                            <h:panelGroup styleClass="md-inputfield">
+
+                                <p:inputText id="email" value="#{recoverBean.emailAddress}" size="30">
+
+                                    <p:ajax event="blur" 
+                                            onstart="$('#progressind').css('visibility','visible');"
+                                            oncomplete="$('#progressind').css('visibility','hidden');"                        
+                                            listener="#{recoverBean.validateEmail()}"/>
+
+
+                                </p:inputText>
+                                <label>#{msg.email}</label>
+
+                            </h:panelGroup>
+                        </div>
+
+                        <div class="ui-g-12">
+                            <p:commandButton value="#{msg.recover}" icon="ui-icon-person" update="recoverForm" action="#{recoverBean.recover}"  ajax="true"></p:commandButton>
+                            <p:button outcome="/login"    value="#{msg.back}"   icon="ui-icon-arrow-back" styleClass="secondary"/>
+                        </div>
+
+
+                    </div>  
+                </div>
+            </h:form>
+            <div class="login-footer">
+                #{msg.copyright}
+                <p:graphicImage name="images/icon-mc.png" library="ultima-layout" />
+                <p:graphicImage name="images/icon-veri.png" library="ultima-layout" />
+                <p:graphicImage name="images/icon-visa.png" library="ultima-layout" />
+            </div>
+            <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+            <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout" />
+        </f:view>
+    </h:body>
+</html>

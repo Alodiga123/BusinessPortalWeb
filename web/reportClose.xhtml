@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.reportCloseTitle}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <div align="center">
+                                <h1>#{msg.reportCloseTitle}</h1>
+                                <f:facet name="header">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                </f:facet>
+                                <p:panelGrid id="cardInfoGrid" columns="6" >
+                                    <h:outputText value="#{msg.startDate}" />
+                                    <p:calendar id="startDate" value="#{businessCloseReportController.startDate}" pattern="MM/dd/yyyy HH:mm">
+                                        <p:ajax event="dateSelect" update="endDate" />
+                                    </p:calendar>
+
+                                    <h:outputText value="#{msg.endDate}" />
+                                    <p:calendar id="endDate" value="#{businessCloseReportController.endDate}" 
+                                                pattern="MM/dd/yyyy HH:mm" mindate="#{businessCloseReportController.startDate}" 
+                                                maxdate="#{businessCloseReportController.maxDate}" />
+
+                                </p:panelGrid>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.reportTransactionGenerate}" update="@form" id="btnSubmit" icon="ui-icon-search" actionListener="#{businessCloseReportController.doReport()}" />
+                                </p:panelGrid>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:dataTable id="resultList" var="close" rendered="#{businessCloseReportController.resultList != null}" 
+                         value="#{businessCloseReportController.resultList}" emptyMessage="#{msg.reportTransactionEmptyResult}" 
+                         filteredValue="#{businessCloseReportController.filterList}" paginator="true" rows="10" style="margin-bottom:20px"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" 
+                         rowsPerPageTemplate="5,10,15" >
+                <p:column filterBy="#{close.id}" headerText="#{msg.id}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{close.id}" />
+                </p:column>
+
+                <p:column filterBy="#{close.dateClose}" headerText="#{msg.date}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{close.dateClose}" />
+                </p:column>
+
+                <p:column filterBy="#{close.status}" headerText="#{msg.status}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{close.status}" />
+                </p:column>
+                
+                <p:column filterBy="#{businessCloseReportController.getTransactionTotal(close)}" headerText="#{msg.closeTransactionTotal}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{businessCloseReportController.getTransactionTotal(close)}" />
+                </p:column>
+                
+                <p:column filterBy="#{businessCloseReportController.getCommisionTotal(close)}" headerText="#{msg.closeComission}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{businessCloseReportController.getCommisionTotal(close)}" />
+                </p:column>
+                
+                <p:column filterBy="#{businessCloseReportController.getSellTotal(close)}" headerText="#{msg.closeSellTotal}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{businessCloseReportController.getSellTotal(close)}" />
+                </p:column>
+                
+                <p:column filterBy="#{businessCloseReportController.getSellAmountTotal(close)}" headerText="#{msg.sellAmount}"  filterMatchMode="contains" style="width:15px">
+                    <h:outputText value="#{businessCloseReportController.getSellAmountTotal(close)}" />
+                </p:column>
+
+                <p:commandButton id="editButton" update=":closeDetailForm" oncomplete="PF('closeDetailDialog').show()" icon="ui-icon-pencil" title="#{msg.detail}">
+                    <f:setPropertyActionListener value="#{close}" target="#{businessCloseController.businessClose}" />
+                </p:commandButton>
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+    
+    <ui:include src="businessCloseDetail.xhtml"/>
+
+</ui:composition>
+

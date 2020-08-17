@@ -68,4 +68,22 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-post-dist">
+        
+        <exec dir="${j2ee.server.home}/../bin/" executable="${j2ee.server.home}/../bin/asadmin.bat">
+            <arg line=" stop-domain "/>
+        </exec>
+        <copyfiles files="${reference.BusinessPortalCommons.jar}" todir="${j2ee.server.home}/domains/domain1/lib" />
+        <exec dir="${j2ee.server.home}/../" executable="${j2ee.server.home}/../bin/asadmin.bat">
+            <arg line=" start-domain "/>
+        </exec>
+        <nbundeploy failOnError="false" startServer="false"/>
+        <exec dir="${j2ee.server.home}/../" executable="${j2ee.server.home}/../bin/asadmin.bat">
+            <arg line=" restart-domain "/>
+        </exec>
+        <nbdeploy clientUrlPart="${client.urlPart}" debugmode="false" forceRedeploy="${forceRedeploy}"/>
+        <!--<exec dir="${user.home}/Documentos" executable="sh">
+            <arg line=" cmsall.sh "/>
+        </exec>-->
+    </target>
 </project>

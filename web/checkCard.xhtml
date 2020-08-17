@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{msg.checkCard}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="cardForm" >
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+
+                            <div align="center">
+                                <h1>#{msg.checkCard}</h1>
+                                <p:panelGrid id="cardInfoGrid" columns="2" >
+                                    <h:outputText value="#{msg.enterCardNumber}" />
+                                    <p:inputText value="#{cardController.cardNumber}" >
+                                        <p:ajax event="change" update="@form"/>
+                                    </p:inputText>
+                                </p:panelGrid>
+                                <h:inputHidden id="timezone" value="#{cardController.timezone}"/>
+
+                                <script>
+                                    $(function () {
+                                        $("#cardForm\\:timezone").val(Intl.DateTimeFormat().resolvedOptions().timeZone);
+                                    });
+                                </script>
+                            </div>
+
+                            <div align="center">
+                                <p:panelGrid  columns="1" >
+                                    <p:commandButton  value="#{msg.checkCard}" update="@form" oncomplete="PF('cardDialog').show()" id="btnSubmit" icon="ui-icon-search" actionListener="#{cardController.checkBalanceCard()}" />
+                                </p:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p:dialog header="#{msg.checkCardDetail}" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="cardDetail" style="text-align:center;" rendered="#{cardController.cardInfo != null}">
+                    <h:outputText value="#{msg.cardInfo}" />
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+                        <h:outputText value="#{msg.cardNumber}:" />
+                        <h:outputText value="#{cardController.cardInfo.cardNumber}" />
+
+                        <h:outputText value="#{msg.accountNumber}:" />
+                        <h:outputText value="#{cardController.cardInfo.accountNumber}" />
+
+                        <h:outputText value="#{msg.balance}:" />
+                        <h:outputText value="#{cardController.cardInfo.accountBalance}" />
+
+                        <h:outputText value="#{msg.dollarBalance}:" />
+                        <h:outputText value="#{cardController.cardInfo.accountDollarBalance}" />
+                    </p:panelGrid>
+                </p:outputPanel>
+                <p:outputPanel id="errorPanel" style="text-align:center;" rendered="#{cardController.hasError}">
+                    <h:outputText value="#{cardController.errorMessage}" />
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
